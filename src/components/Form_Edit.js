@@ -1,18 +1,35 @@
 import React, { Component } from 'react'
-import { Button, ButtonToolbar, Dropdown, ListGroup} from 'react-bootstrap'
-import 'bootstrap/dist/css/bootstrap.css';
+import {Dropdown} from 'react-bootstrap'
+import 'bootstrap/dist/css/bootstrap.css'
+import CivilizationList from './CivilizationList'
+import PlacesList from './PlacesList'
+
+// 1
+import { ApolloProvider } from 'react-apollo'
+import { ApolloClient } from 'apollo-client'
+import { createHttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+
+const httpLink = createHttpLink({
+  uri: 'http://192.168.0.26:8080/graphql'
+})
+
+// 3
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache()
+})
+
+
 
 const text_style ={
   color: '#000000'
 }
 
-const buttons_style ={
-  margin: '15px'
+const margin_style ={
+  'marginBottom': '15px'
 }
 
-const margin_style ={
-  'margin-bottom': '15px'
-}
 
 class Form_Edit extends Component{
   constructor (){
@@ -27,47 +44,23 @@ class Form_Edit extends Component{
 
   render(){
     return(
-      <div class="content">
-        <header id="header" >
-          <h1 style={text_style}>Edita civilizaciones</h1>
-          <p>Selecciona la civilización y edita sus lugares</p>
-        </header>
+        <ApolloProvider client={client}>
+          <div className="content">
+            <header id="header" >
+              <h1 style={text_style}>Edita civilizaciones</h1>
+              <p>Selecciona la civilización y edita sus lugares</p>
+            </header>
 
-        <Dropdown style={margin_style}>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
-            Selecciona para ver las civilizaciones disponibles
-          </Dropdown.Toggle>
+            <Dropdown style={margin_style}>
+              <Dropdown.Toggle variant="success" id="dropdown-basic">
+                Selecciona para ver las civilizaciones disponibles
+              </Dropdown.Toggle>
+              <CivilizationList />
+              
+            </Dropdown>
 
-          <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1">Chibchas</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">Muiscas</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">Motilones</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-
-        <ListGroup style={margin_style}>
-          <ListGroup.Item>Place 1
-            <ButtonToolbar>
-              <Button style={buttons_style} variant="primary">Editar</Button>
-              <Button style={buttons_style} variant="secondary">Eliminar</Button>
-            </ButtonToolbar>
-          </ListGroup.Item>
-          <ListGroup.Item>Place 2
-            <ButtonToolbar>
-              <Button style={buttons_style} variant="primary">Editar</Button>
-              <Button style={buttons_style} variant="secondary">Eliminar</Button>
-            </ButtonToolbar>
-          </ListGroup.Item>
-          <ListGroup.Item>Place 3
-            <ButtonToolbar>
-              <Button style={buttons_style} variant="primary">Editar</Button>
-              <Button style={buttons_style} variant="secondary">Eliminar</Button>
-            </ButtonToolbar>
-          </ListGroup.Item>
-
-        </ListGroup>
-
-    </div>
+        </div>
+      </ApolloProvider>
     );
 }
 }

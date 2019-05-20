@@ -11,20 +11,27 @@ const admin_buttons_style ={
 }
 
 const input_style ={
-  'margin-bottom': '15px'
+  'marginBottom': '15px'
 }
+
+
+
 class Form_Add extends Component{
-  constructor (){
-    super();
-    this.state ={
-      name: '',
-      description: '',
-      places: []
-    };
+  state ={
+    places: [{name:"",description:"",latitude:"",longitude:"",tag:""}],
   }
+
+  addLocation = (e) => {
+    this.setState((prevState) => ({
+      places: [...prevState.places, {name:"", description:"", latitude:"",longitude:"",tag:""}],
+    }));
+  }
+
+handleSubmit = (e) => { e.preventDefault() }
   render(){
+    let {places} = this.state
     return(
-      <div class="content">
+      <div className="content">
         <header id="header" >
           <h1 style={text_style}>Agrega civilizaciones</h1>
           <p>Ingresa los campos y agrega lugares a la civilización que estás por crear</p>
@@ -42,45 +49,49 @@ class Form_Add extends Component{
                 Esta información no podrá ser cambiada.
               </Form.Text>
           </Form.Group>
-
-
           <h4 style={text_style}>Lugares</h4>
-          <Row style={input_style}>
-             <Col>
-               <Form.Text className="text-muted">
-                 Nombre
-               </Form.Text>
-               <Form.Control placeholder="Nombre" />
-             </Col>
-             <Col>
-               <Form.Text className="text-muted">
-                 Descripción
-               </Form.Text>
-               <Form.Control placeholder="Descripción" />
-             </Col>
-             <Col>
-               <Form.Text className="text-muted">
-                 Latitud
-               </Form.Text>
-               <Form.Control placeholder="Latitud" />
-             </Col>
-             <Col>
-               <Form.Text className="text-muted">
-                 Longitud
-               </Form.Text>
-               <Form.Control placeholder="Longitud" />
-             </Col>
-             <Col>
-               <Form.Text className="text-muted">
-                 Etiqueta
-               </Form.Text>
-               <Form.Control placeholder="Etiqueta" />
-             </Col>
-           </Row>
-
-        <Button style={admin_buttons_style} variant="secondary" type="submit">
+        <Button style={admin_buttons_style} variant="secondary" type="button" onClick={this.addLocation}>
           Agregar más lugares
         </Button>
+        {
+          places.map((val, idx) => {
+            let namePlace = {idx}, descriptionPlace = {idx}, latitudePlace ={idx}, longitudePlace={idx}, tagPlace={idx}
+            return(
+              <Row style={input_style} key={idx}>
+                         <Col>
+                           <label htmlFor={namePlace}><Form.Text className="text-muted">
+                             Nombre
+                           </Form.Text></label>
+                           <Form.Control placeholder="Nombre" />
+                         </Col>
+                         <Col>
+                           <label htmlFor={descriptionPlace}><Form.Text className="text-muted">
+                             Descripción
+                           </Form.Text></label>
+                           <Form.Control placeholder="Descripción" />
+                         </Col>
+                         <Col>
+                           <label htmlFor={latitudePlace}><Form.Text className="text-muted">
+                             Latitud
+                           </Form.Text></label>
+                           <Form.Control placeholder="Latitud" />
+                         </Col>
+                         <Col>
+                           <label htmlFor={longitudePlace}><Form.Text className="text-muted">
+                             Longitud
+                           </Form.Text></label>
+                           <Form.Control placeholder="Longitud" />
+                         </Col>
+                         <Col>
+                           <label htmlFor={tagPlace}><Form.Text className="text-muted">
+                             Etiqueta
+                           </Form.Text></label>
+                           <Form.Control placeholder="Etiqueta" />
+                         </Col>
+              </Row>
+            );
+          })
+        }
         <Button variant="primary" style={admin_buttons_style} type="submit">
           Guardar
         </Button>
@@ -91,3 +102,4 @@ class Form_Add extends Component{
 }
 
 export default Form_Add;
+//Biblio: https://itnext.io/building-a-dynamic-controlled-form-in-react-together-794a44ee552c

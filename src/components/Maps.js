@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 import config from '../others/config.js'
+import LeftButtonsMap from './LeftButtonsMap'
+import BottomButtonsMap from './BottomButtonsMap'
 import {Form, Button, ButtonGroup, Popover, OverlayTrigger} from 'react-bootstrap'
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
-function action(){
-  console.log("Hellouda");
-}
 
 const handleApiLoaded = (map, maps) => {
   return(
@@ -20,24 +19,6 @@ const handleApiLoaded = (map, maps) => {
 };
 
 
-
-const form =(
-  <Popover id="popover-basic" title="Popover right">
-    <Form>
-    <Form.Group controlId="form">
-      <Form.Label>Latitud</Form.Label>
-      <Form.Control size="sm" type="number" placeholder="Latitud" />
-      <Form.Label size="sm">Longitud</Form.Label>
-      <Form.Control size="sm" type="number" placeholder="Longitud" />
-      <Form.Label size="sm">Nombre</Form.Label>
-      <Form.Control size="sm" type="text" placeholder="Nombre" />
-    </Form.Group>
-    <Button variant="primary" type="button" onClick={action}>
-      Add
-    </Button>
-  </Form>
-  </Popover>
-);
 
 class MapView extends Component {
 
@@ -60,18 +41,8 @@ class MapView extends Component {
     return (
       // Important! Always set the container height explicitly
       <div style={{ height: '100vh', width: '100%' }}>
-        <ButtonGroup vertical>
-          <OverlayTrigger trigger="click" placement="right" overlay={form}>
-            <Button variant="success">Add</Button>
-          </OverlayTrigger>
-          <OverlayTrigger trigger="click" placement="right" overlay={form}>
-            <Button variant="success">Save</Button>
-          </OverlayTrigger>
-          <OverlayTrigger trigger="click" placement="right" overlay={form}>
-            <Button variant="success">See</Button>
-          </OverlayTrigger>
-        </ButtonGroup>
 
+        <LeftButtonsMap/>
         <GoogleMapReact
           bootstrapURLKeys={{ key:config.API_KEY}}
           defaultCenter={this.props.center}
@@ -83,11 +54,7 @@ class MapView extends Component {
         >
         </GoogleMapReact>
         {AnyReactComponent}
-        <ButtonGroup size="sm" aria-label="Basic example">
-            <Button variant="secondary">Left</Button>
-            <Button variant="secondary">Middle</Button>
-            <Button variant="secondary">Right</Button>
-        </ButtonGroup>
+        <BottomButtonsMap/>
       </div>
     );
   }

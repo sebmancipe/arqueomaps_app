@@ -2,6 +2,23 @@ import React, { Component } from 'react'
 import {Form, Button, Row, Col} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.css';
 
+// 1
+import { ApolloProvider } from 'react-apollo'
+import { ApolloClient } from 'apollo-client'
+import { createHttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+
+const httpLink = createHttpLink({
+  uri: 'http://192.168.0.26:8080/graphql'
+})
+
+// 3
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache()
+})
+
+
 const text_style ={
   color: '#000000'
 }
@@ -31,6 +48,7 @@ handleSubmit = (e) => { e.preventDefault() }
   render(){
     let {places} = this.state
     return(
+      <ApolloProvider client={client}>
       <div className="content">
         <header id="header" >
           <h1 style={text_style}>Agrega civilizaciones</h1>
@@ -92,11 +110,12 @@ handleSubmit = (e) => { e.preventDefault() }
             );
           })
         }
-        <Button variant="primary" style={admin_buttons_style} type="submit">
+        <Button variant="primary" style={admin_buttons_style} type="submit" >
           Guardar
         </Button>
       </Form>
     </div>
+    </ApolloProvider>
     );
 }
 }

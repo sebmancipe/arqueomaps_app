@@ -24,13 +24,13 @@ class MainPage extends Component {
 
   render() {
     return (
-      <section class="wrapper">
+      <section className="wrapper">
           <div>
           {/*Carousel was getting from https://www.npmjs.com/package/react-background-slideshow*/}
             <BackgroundSlideshow images={images} animationDelay={5000}/>
           </div>
 
-        <div class="content">
+        <div className="content">
           <header id="header">
             <h1>¡Bienvenido a ArqueoMaps!</h1>
             <p style={text_style}>¿Qué deseas hacer?</p>
@@ -42,12 +42,12 @@ class MainPage extends Component {
       		</form>
 
           <footer id="footer">
-    				<ul class="icons">
-             <li><a href="https://www.facebook.com/SarosColombia/" target="_blank" rel="noopener noreferrer" class="icon fa-facebook-f"><span class="label">Twitter</span></a></li>
-    					<li><a href="https://www.instagram.com/sarosastromath/" target="_blank" rel="noopener noreferrer" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
-    					<li><a href="https://www.instagram.com/sarosastromath/" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+    				<ul className="icons">
+             <li><a href="https://www.facebook.com/SarosColombia/" target="_blank" rel="noopener noreferrer" className="icon fa-facebook-f"><span className="label">Twitter</span></a></li>
+    					<li><a href="https://www.instagram.com/sarosastromath/" target="_blank" rel="noopener noreferrer" className="icon fa-instagram"><span className="label">Instagram</span></a></li>
+    					<li><a href="https://www.instagram.com/sarosastromath/" className="icon fa-envelope-o"><span className="label">Email</span></a></li>
     				</ul>
-    				<ul class="copyright">
+    				<ul className="copyright">
     					<li>&copy; Untitled.</li><li>Credits: <a href="http://html5up.net">HTML5 UP</a></li>
     				</ul>
     		 </footer>

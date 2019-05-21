@@ -3,7 +3,7 @@ import GoogleMapReact from 'google-map-react';
 import config from '../others/config.js'
 import LeftButtonsMap from './LeftButtonsMap'
 import BottomButtonsMap from './BottomButtonsMap'
-import {Form, Button, ButtonGroup, Popover, OverlayTrigger} from 'react-bootstrap'
+
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
@@ -61,3 +61,4 @@ class MapView extends Component {
 }
 
 export default MapView;
+// https://istarkov.github.io/google-map-thousands-markers/

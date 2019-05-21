@@ -11,7 +11,7 @@ import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
 const httpLink = createHttpLink({
-  uri: 'http://192.168.0.26:8080/graphql'
+  uri: 'http://192.168.0.30:8080/graphql'
 })
 
 // 3
@@ -56,7 +56,7 @@ class Form_Edit extends Component{
                 Selecciona para ver las civilizaciones disponibles
               </Dropdown.Toggle>
               <CivilizationList />
-              
+              <PlacesList civilizationId={2}/>
             </Dropdown>
 
         </div>

@@ -13,7 +13,7 @@
   class AdministrationView extends Component{
     render(){
       return(
-        <div class="content">
+        <div className="content">
           <header id="header" >
             <h1 style={text_style}>Administra las civilizaciones</h1>
             <p>Selecciona alguna de las siguientes opciones</p>

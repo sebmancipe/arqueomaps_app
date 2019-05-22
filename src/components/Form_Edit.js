@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {Dropdown} from 'react-bootstrap'
+import config from '../others/config'
 import 'bootstrap/dist/css/bootstrap.css'
 import CivilizationList from './CivilizationList'
 import PlacesList from './PlacesList'
@@ -11,7 +12,7 @@ import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
 const httpLink = createHttpLink({
-  uri: 'http://192.168.0.30:8080/graphql'
+  uri: config.HOST
 })
 
 // 3

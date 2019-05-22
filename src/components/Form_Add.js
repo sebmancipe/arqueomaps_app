@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {Form, Button} from 'react-bootstrap'
 import PlaceInputs from './PlaceInputs'
+import config from '../others/config'
 import CivilizationAdd from './CivilizationAdd'
 
 
@@ -11,7 +12,7 @@ import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
 const httpLink = createHttpLink({
-  uri: 'http://192.168.0.30:8080/graphql'
+  uri: config.HOST
 })
 
 // 3

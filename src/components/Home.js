@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import BackgroundSlideshow from 'react-background-slideshow'
 import {NavLink} from 'react-router-dom'
+import {Button,DropdownButton, Dropdown} from 'react-bootstrap'
 import '../styles/main.css'
 
 /*
@@ -37,8 +38,13 @@ class MainPage extends Component {
           </header>
 
           <form id="signup-form"  action="#">
-      				<NavLink to="/admin"> <input type="submit" value="Administrar civilizaciones"/></NavLink>
-              <NavLink to="/map"> <input type="submit" value="Lanzar el mapa"/> </NavLink>
+      				<NavLink to="/admin"> <Button variant="primary" type="button">
+                Administrar civilizaciones
+              </Button></NavLink>
+              <DropdownButton id="dropdown-basic-button" title="Lanzar el mapa">
+                 <Dropdown.Item href="/map"> Mapa libre </Dropdown.Item>
+                <Dropdown.Item>Mapa</Dropdown.Item>
+              </DropdownButton>
       		</form>
 
           <footer id="footer">

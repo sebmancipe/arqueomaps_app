@@ -5,36 +5,32 @@ import LeftButtonsMap from './LeftButtonsMap'
 import BottomButtonsMap from './BottomButtonsMap'
 
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+//const AnyReactComponent = ({ text }) => <div>{text}</div>;
+//Biblio: https://stackoverflow.com/questions/41676254/react-js-pass-data-between-components-flow
+//Biblio 2: https://stackoverflow.com/questions/43937887/dynamically-adding-markers-on-react-google-map
 
+const AnyReactComponent = ({  text_mark }) => <div>{text_mark}</div>
 
 class MapView extends Component {
+  constructor(props){
+    super(props);
+      this.state = {
+        markers: [{lat:58.9, lng: 31.3, text_mark: 'Mark 1'},
+        {lat:60.1,lng: 78.3, text_mark: 'Mark 2'}],
+      }
+  }
 
   static defaultProps = {
     center: {
-      lat: 59.95,
+      lat: 58.95,
       lng: 30.33
     },
-    zoom: 11,
-    greatPlaces: [
-     {id: 'A', lat: 59.955413, lng: 30.337844},
-     {id: 'B', lat: 59.724, lng: 30.080}
-   ]
+    zoom: 11
   }
-
-  handleApiLoaded (map, maps) {
-    let marker = new maps.Marker({
-      position: {lat:59.95, lng: 30.33},
-      map,
-      title: 'Hello World!'
-    });
-  }
-
-
 
   render() {
     return (
-      <div style={{height:'100vh',width:'100%'}}>
+      <div style={{height:'100vh',width:'100%', position:'relative'}}>
         <LeftButtonsMap/>
         <GoogleMapReact
           bootstrapURLKeys={{ key:config.API_KEY}}
@@ -42,11 +38,20 @@ class MapView extends Component {
           defaultZoom={this.props.zoom}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
+          disableDefaultUI={true}
           yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={({ map, maps }) => this.handleApiLoaded(map, maps)}
         >
+          {console.log(this.state.markers)}
+          {this.state.markers.map((marker, i) =>{
+              return(
+                <AnyReactComponent
+                  lat={marker.lat}
+                  lng={marker.lng}
+                  text_mark={marker.text_mark}
+                />
+              )
+            })}
         </GoogleMapReact>
-
         <BottomButtonsMap/>
       </div>
     )

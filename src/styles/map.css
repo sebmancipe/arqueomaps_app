@@ -21,6 +21,16 @@ and open the template in the editor.
           padding: 0;
       }
 
+      .buttonGroupVertical {
+        top:130px;
+        z-index: 100;
+      }
+
+      .buttonGroupHorizontal{
+        left: 50%;
+        bottom: 40px;
+      }
+
       #content{
           margin-left: auto;
           margin-right: auto;

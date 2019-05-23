@@ -9,45 +9,60 @@ import BottomButtonsMap from './BottomButtonsMap'
 //Biblio: https://stackoverflow.com/questions/41676254/react-js-pass-data-between-components-flow
 //Biblio 2: https://stackoverflow.com/questions/43937887/dynamically-adding-markers-on-react-google-map
 
-const AnyReactComponent = ({  text_mark }) => <div>{text_mark}</div>
+// TODO: Join markers 
+
+const AnyReactComponent = ({ id, text_mark }) => <div key={id}>{text_mark}</div>
 
 class MapView extends Component {
   constructor(props){
     super(props);
-      this.state = {
-        markers: [{lat:58.9, lng: 31.3, text_mark: 'Mark 1'},
-        {lat:60.1,lng: 78.3, text_mark: 'Mark 2'}],
-      }
+    this.state = {
+      markers: [{lat:'', lng:'', text_mark: ""}],
+      center: {
+        lat:15.5,
+        lng:45.5
+      },
+      zoom:4
+    }
   }
 
-  static defaultProps = {
-    center: {
-      lat: 58.95,
-      lng: 30.33
-    },
-    zoom: 11
+
+
+
+  addMarker(latitude, longitude, text){
+    let markers = [...this.state.markers]
+    markers.push({lat:latitude,lng:  longitude,text_mark: text})
+    this.setState({markers})
+    this.setState({
+      center:{
+        lat:Number(latitude),
+        lng:Number(longitude)}
+    });
+    let zoom = 6
+    this.setState({zoom})
   }
+
 
   render() {
     return (
-      <div style={{height:'100vh',width:'100%', position:'relative'}}>
-        <LeftButtonsMap/>
+      <div style={{height:"100vh",width:"100%", position:'relative'}}>
+        <LeftButtonsMap viewMarkers={this.addMarker.bind(this)}/>
         <GoogleMapReact
           bootstrapURLKeys={{ key:config.API_KEY}}
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
+          center={this.state.center}
+          zoom={this.state.zoom}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
           disableDefaultUI={true}
           yesIWantToUseGoogleMapApiInternals
         >
-          {console.log(this.state.markers)}
           {this.state.markers.map((marker, i) =>{
               return(
                 <AnyReactComponent
                   lat={marker.lat}
                   lng={marker.lng}
                   text_mark={marker.text_mark}
+                  key={i}
                 />
               )
             })}

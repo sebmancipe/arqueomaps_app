@@ -33,13 +33,18 @@ const margin_style ={
 
 
 class Form_Edit extends Component{
-  constructor (){
-    super();
+  constructor (props){
+    super(props);
     this.state ={
       name: '',
       description: '',
-      places: []
+      places: [],
+      id_selected: ''
     };
+  }
+
+  onSelectedCiv(id){
+    this.setState({id_selected:id})
   }
 
 
@@ -51,13 +56,13 @@ class Form_Edit extends Component{
               <h1 style={text_style}>Edita civilizaciones</h1>
               <p>Selecciona la civilización y edita sus lugares</p>
             </header>
-
+      
             <Dropdown style={margin_style}>
               <Dropdown.Toggle variant="success" id="dropdown-basic">
                 Selecciona para ver las civilizaciones disponibles
               </Dropdown.Toggle>
-              <CivilizationList />
-              <PlacesList civilizationId={2}/>
+              <CivilizationList onSelectedCiv={this.onSelectedCiv.bind(this)}/>
+              <PlacesList civilizationId={this.state.id_selected}/>
             </Dropdown>
 
         </div>

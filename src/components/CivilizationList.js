@@ -3,7 +3,6 @@ import Civilization from './Civilization'
 import {Dropdown} from 'react-bootstrap'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
-import PlacesList from './PlacesList'
 
 const CIV_QUERY = gql`
 {
@@ -18,12 +17,9 @@ class CivilizationList extends Component {
 
 //TODO: Check the return value in PlacesList
   requestPlaces(civilizationId){
-    console.log("Ingresa a request con Civ " + civilizationId);
-    return <PlacesList civilizationId={civilizationId}/>
-  }
-
-  handleClick = (e) => {
-    this.requestPlaces(e);
+    this.props.onSelectedCiv(
+      civilizationId
+    )
   }
 
   render() {

@@ -1,11 +1,6 @@
 import React, {Component} from 'react'
-import {Button} from 'react-bootstrap'
 import { Mutation } from "react-apollo";
 import { gql } from "apollo-boost";
-
-const admin_buttons_style ={
-  margin: '5px'
-}
 
 
 
@@ -22,17 +17,26 @@ const CIV_MUT = gql`
 
 class CivilizationAdd extends Component{
   render(){
-    const civilizationName = this.props.civilization.civilization_name, civilizationDescription = this.props.civilization.civilization_description
-    return (
-      <Mutation mutation={CIV_MUT} variables={{Name:civilizationName, Description:civilizationDescription}}>
-        {(postMutation, { data } ) => {
+    const civilizationName = this.props.civilizationprops.civilization_name, 
+    submitButton = this.props.civilizationprops.civ_petition,
+    civilizationDescription = this.props.civilizationprops.civilization_description
+    if(submitButton){
+      return (
+        <Mutation mutation={CIV_MUT} variables={{Name:civilizationName, Description:civilizationDescription}}>
+        {/*TODO: Check how to start a mutation without a onClick method*/}
+        {(submitButton, { data } ) => {
+          const dataReceived = data.newCivilization
           return (
-            <Button variant="primary" style={admin_buttons_style} onClick={postMutation}>Guardar</Button>
+            <div>
+              {dataReceived.Id+" "+dataReceived.Name +" "}
+            </div>
           )
         }
       }
-      </Mutation>
-    )
+      </Mutation>)
+      }else{
+        return null
+      }   
   }
 }
 

@@ -29,8 +29,9 @@ class PlacesList extends Component {
       <Query query={PLACE_QUERY} variables={{Id:civilizationId}} pollInterval={500}>
         {({ loading, error, data }) => {
           if (loading) return <div>Fetching Places</div>
-          if (error) return <div>Error</div>
+          if (error) return <div>Ups, selecciona una civilización primero</div>
           const placesToRender = data.getAllPlacesFromCivilization
+          //TODO: Show other component based in the response
           return(
             <ListGroup style={margin_style}>
               {placesToRender.map(place =>

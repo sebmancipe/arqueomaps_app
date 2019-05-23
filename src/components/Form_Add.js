@@ -45,7 +45,7 @@ class Form_Add extends Component {
       civ_petition: false,
     }
   }
-  
+
 
   handleChange = (e) => {
     var targetRealClassName = e.target.className.replace(' form-control', '')
@@ -79,8 +79,8 @@ class Form_Add extends Component {
     let civilizationprops = {
       civilization_name: this.state.civilization_name,
       civilization_description: this.state.civilization_description,
-      //TODO: Error passing the prop
       civ_petition: this.state.civ_petition,
+      places_toadd: this.state.places,
       addedCivilization: this.addedCivilization.bind(this),
     }
     let placesProps = {
@@ -112,7 +112,7 @@ class Form_Add extends Component {
             <Button style={admin_buttons_style} variant="secondary" type="button" onClick={this.addLocation}>
               Agregar más lugares
             </Button>
-            <Button variant="primary" style={admin_buttons_style} onClick={this.submitAction}>Guardar</Button>
+            {/*<Button variant="primary" style={admin_buttons_style} onClick={this.submitAction}>Guardar</Button>*/}
             <PlaceInputs places={placesToRender} />
             <CivilizationAdd civilizationprops={civilizationprops} />
             <PlacesAdd places={placesProps} />

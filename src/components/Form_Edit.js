@@ -38,7 +38,6 @@ class Form_Edit extends Component{
     this.state ={
       name: '',
       description: '',
-      places: [],
       id_selected: ''
     };
   }

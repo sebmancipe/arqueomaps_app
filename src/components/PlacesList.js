@@ -24,16 +24,16 @@ query getAllPlacesFromCivilization($Id:Int)
 `
 class PlacesList extends Component {
   render(){
-    const civilizationId = this.props.civilizationId
+    const civilizationId = Number(this.props.civilizationId)
     return(
-      <Query query={PLACE_QUERY} variables={{Id:civilizationId}} pollInterval={500}>
+      <Query  key={civilizationId} query={PLACE_QUERY} variables={{Id:civilizationId}} pollInterval={500}>
         {({ loading, error, data }) => {
           if (loading) return <div>Fetching Places</div>
           if (error) return <div>Ups, selecciona una civilización primero</div>
           const placesToRender = data.getAllPlacesFromCivilization
           //TODO: Show other component based in the response
           return(
-            <ListGroup style={margin_style}>
+            <ListGroup key={civilizationId} style={margin_style}>
               {placesToRender.map(place =>
                 <ListGroup.Item key={place.Id}> {place.Name}
                   <ButtonToolbar key={place.Id}>

@@ -36,14 +36,14 @@ const admin_buttons_style = {
 
 class Form_Add extends Component {
   constructor(props){
-    super(props);
+    super();
     this.state = {
       places: [{ place_name: "", place_description: "", place_latitude: "", place_longitude: "", place_tag: "" }],
       civilization_name: "",
       civilization_description: "",
-      civilization_id: "",
-      civ_petition: false,
+      civilization_id: '',
     }
+    this.addedCivilization = this.addedCivilization.bind(this)
   }
 
 
@@ -60,17 +60,15 @@ class Form_Add extends Component {
 
   addLocation = (e) => {
     this.setState((prevState) => ({
-      places: [...prevState.places, { name: "", description: "", latitude: "", longitude: "", tag: "" }],
+      places: [...prevState.places, { place_name: "", place_description: "", place_latitude: "", place_longitude: "", place_tag: "" }]
     }));
   }
 
-  submitAction = (e) => {
-    e.preventDefault()
-    this.setState({ civ_petition: true})
-  }
 
   addedCivilization(id_civ) {
     this.setState({ civilization_id: id_civ })
+    console.log("La id de la civilización ha cambiado")
+    
   }
 
 
@@ -79,14 +77,10 @@ class Form_Add extends Component {
     let civilizationprops = {
       civilization_name: this.state.civilization_name,
       civilization_description: this.state.civilization_description,
-      civ_petition: this.state.civ_petition,
-      places_toadd: this.state.places,
-      addedCivilization: this.addedCivilization.bind(this),
+      addedCivilization: this.addedCivilization,
+      places: this.state.places
     }
-    let placesProps = {
-      places: placesToRender,
-      civilization_id: this.state.civilization_id
-    }
+    
 
     return (
       <ApolloProvider client={client}>
@@ -108,14 +102,15 @@ class Form_Add extends Component {
                 Esta información no podrá ser cambiada.
               </Form.Text>
             </Form.Group>
+
             <h4 style={text_style}>Lugares</h4>
-            <Button style={admin_buttons_style} variant="secondary" type="button" onClick={this.addLocation}>
+            <Button style={admin_buttons_style} variant="secondary"  onClick={this.addLocation}>
               Agregar más lugares
             </Button>
             {/*<Button variant="primary" style={admin_buttons_style} onClick={this.submitAction}>Guardar</Button>*/}
             <PlaceInputs places={placesToRender} />
             <CivilizationAdd civilizationprops={civilizationprops} />
-            <PlacesAdd places={placesProps} />
+            
           </Form>
         </div>
       </ApolloProvider>

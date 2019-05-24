@@ -6,11 +6,19 @@ class LeftButtonsMap extends Component{
 
   renderMarker = (e) =>{
     e.preventDefault()
-    this.props.viewMarkers(
+    this.props.LeftButtonsMapProps.addMarker(
       e.target.latitude.value,
       e.target.longitude.value,
       e.target.textname.value)
   }
+
+  showPolyline = (e) =>{
+    e.preventDefault()
+    this.props.LeftButtonsMapProps.generatePolyline()
+  }
+    
+    
+  
 
   render() {
     return(
@@ -34,7 +42,7 @@ class LeftButtonsMap extends Component{
         </Popover>
 
         }>
-          <Button variant="success">Add</Button>
+          <Button variant="success" onClick={this.showPolyline}>Add</Button>
         </OverlayTrigger>
         <OverlayTrigger trigger="click" placement="right" >
           <Button variant="success">Save</Button>

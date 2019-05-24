@@ -1,5 +1,4 @@
-import React from 'react';
-import { Mutation } from 'react-apollo';
+import React from 'react'
 
 class PlaceMutation extends React.Component {
   componentDidMount() {

@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { Mutation } from "react-apollo"
-import { gql } from "apollo-boost"
+import { gql } from 'apollo-boost'
 import { Button } from 'react-bootstrap'
 import PlacesAdd from './PlacesAdd'
-import PlaceMutation from './PlaceMutation'
 
 const admin_buttons_style = {
   margin: '5px'
@@ -56,7 +55,7 @@ class CivilizationAdd extends Component {
         {(handleSubmit, { data }) => (
             /*<PlaceMutation mutate={handleSubmit}/>*/
             <div>
-              <Button variant="primary" style={admin_buttons_style} onClick={handleSubmit}>Guardar civ y lugares</Button>
+              <Button variant="primary" style={admin_buttons_style} onClick={handleSubmit}>Guardar</Button>
               <PlacesAdd placesprops={placesprops} />
             </div>
           

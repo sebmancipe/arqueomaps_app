@@ -3,7 +3,6 @@ import { Form, Button } from 'react-bootstrap'
 import PlaceInputs from './PlaceInputs'
 import config from '../others/config'
 import CivilizationAdd from './CivilizationAdd'
-import PlacesAdd from './PlacesAdd'
 
 
 // 1
@@ -64,6 +63,12 @@ class Form_Add extends Component {
     }));
   }
 
+  removeLocation = (e) => {
+    this.setState((prevState) => ({
+      places: [...prevState.places.splice(-1,1)]
+    }));
+  }
+
 
   addedCivilization(id_civ) {
     this.setState({ civilization_id: id_civ })
@@ -106,6 +111,9 @@ class Form_Add extends Component {
             <h4 style={text_style}>Lugares</h4>
             <Button style={admin_buttons_style} variant="secondary"  onClick={this.addLocation}>
               Agregar más lugares
+            </Button>
+            <Button style={admin_buttons_style} variant="secondary"  onClick={this.removeLocation}>
+              Eliminar lugares
             </Button>
             {/*<Button variant="primary" style={admin_buttons_style} onClick={this.submitAction}>Guardar</Button>*/}
             <PlaceInputs places={placesToRender} />

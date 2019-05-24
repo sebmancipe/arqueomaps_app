@@ -1,13 +1,7 @@
 import React, { Component } from 'react'
-import { Button } from 'react-bootstrap'
-import { Mutation } from "react-apollo";
-import { gql } from "apollo-boost";
+import { Mutation } from "react-apollo"
+import {gql} from 'apollo-boost'
 import PlaceMutation from './PlaceMutation'
-
-const admin_buttons_style = {
-  margin: '5px'
-}
-
 
 
 const PLAC_MUT = gql`

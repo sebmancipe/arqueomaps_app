@@ -3,6 +3,7 @@ import { Mutation } from "react-apollo"
 import { gql } from 'apollo-boost'
 import { Button } from 'react-bootstrap'
 import PlacesAdd from './PlacesAdd'
+import {Alert} from 'react-bootstrap'
 
 const admin_buttons_style = {
   margin: '5px'
@@ -24,7 +25,7 @@ class CivilizationAdd extends Component {
   constructor(props) {
     super()
     this.state = {
-      id_civ: ''
+      id_civ: '',
     }
 
   }
@@ -32,7 +33,6 @@ class CivilizationAdd extends Component {
   handleSubmit(id) {
     console.log("Completed mutation, reponse " + id)
     this.setState({ id_civ: id })
-
   }
 
   render() {
@@ -44,19 +44,25 @@ class CivilizationAdd extends Component {
       places: places
     }
     return (
+      //This mutation creates the Civilization
       <Mutation mutation={CIV_MUT}
         variables={{ Name: civilizationName, Description: civilizationDescription }}
         update={(cache, { data: { newCivilization } }) => {
           this.handleSubmit(newCivilization.Id)
           console.log(newCivilization.Id)
-          
         }
         }>
-        {(handleSubmit, { data }) => (
-            /*<PlaceMutation mutate={handleSubmit}/>*/
+        {/*If the mutation is completed, call the PlacesAdd component to create the places with the civilization's id response*/}
+        {(handleSubmit, { data, error }) => (
             <div>
-              <Button variant="primary" style={admin_buttons_style} onClick={handleSubmit}>Guardar</Button>
+              <Button variant="primary" style={admin_buttons_style} 
+              disabled={!(this.props.civilizationprops.civilization_name && this.props.civilizationprops.civilization_description)} 
+              onClick={handleSubmit}>Guardar</Button>
               <PlacesAdd placesprops={placesprops} />
+              {error && 
+                <Alert variant='danger'>
+                Ha ocurrido un error, intenta nuevamente
+              </Alert>} 
             </div>
           
         )

@@ -1,3 +1,10 @@
+/* 
+Author: Sebastian Mancipe
+Date: Apr 28 - 2019
+Last update: July 5 - 2019
+Description: 
+This component shows an error message if the url was not found
+*/
 import React, { Component } from 'react'
 import img_1 from '../images/man.png'
 import img_2 from '../images/question-sign.png'

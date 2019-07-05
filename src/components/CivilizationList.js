@@ -1,3 +1,12 @@
+/* 
+Author: Sebastian Mancipe
+Date: May 23 - 2019
+Last update: July 5 - 2019
+Description: 
+This component executes the query to get all the civilizations avaliables. 
+Is used in Form_Edit component 
+*/
+
 import React, {Component} from 'react'
 import Civilization from './Civilization'
 import {Dropdown} from 'react-bootstrap'
@@ -31,6 +40,7 @@ class CivilizationList extends Component {
           const civilizationsToRender = data.getAllCivilizations
           return(
             <Dropdown.Menu>
+            {/*Loads all the civilizations in a dropdown with the information in the component Civilization*/}
               {civilizationsToRender.map(civilization =>
                 <Dropdown.Item onClick={()=>{this.requestPlaces(civilization.Id)}} key={civilization.Id}>
                   <Civilization key={civilization.Id} civilization={civilization} />

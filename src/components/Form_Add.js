@@ -1,3 +1,12 @@
+/* 
+Author: Sebastian Mancipe
+Date: May 24 - 2019
+Last update: July 5 - 2019
+Description: 
+This component shows the creates civilization and places section.
+Contains the main configuration of Apollo Client also
+*/
+
 import React, { Component } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import PlaceInputs from './PlaceInputs'
@@ -46,6 +55,11 @@ class Form_Add extends Component {
   }
 
 
+  /*
+  This method handle the changes in any input of the form and saves it to the places state.
+  Check if some input based in the class name has been changed
+  And update the value in the position of the place and in the attribute changed.
+   */
   handleChange = (e) => {
     var targetRealClassName = e.target.className.replace(' form-control', '')
     if (["place_name", "place_description", "place_latitude", "place_longitude", "place_tag"].includes(targetRealClassName)) {
@@ -57,12 +71,18 @@ class Form_Add extends Component {
     }
   }
 
+  /* 
+  Creates new object in the array to add another place
+  */
   addLocation = (e) => {
     this.setState((prevState) => ({
       places: [...prevState.places, { place_name: "", place_description: "", place_latitude: "", place_longitude: "", place_tag: "" }]
     }));
   }
 
+  /*
+  Removes the places remaining just one
+  */
   removeLocation = (e) => {
     this.setState((prevState) => ({
       places: [...prevState.places.splice(-1,1)]
@@ -72,8 +92,6 @@ class Form_Add extends Component {
 
   addedCivilization(id_civ) {
     this.setState({ civilization_id: id_civ })
-    console.log("La id de la civilización ha cambiado")
-    
   }
 
 
@@ -115,7 +133,6 @@ class Form_Add extends Component {
             <Button style={admin_buttons_style} variant="secondary"  onClick={this.removeLocation}>
               Eliminar lugares
             </Button>
-            {/*<Button variant="primary" style={admin_buttons_style} onClick={this.submitAction}>Guardar</Button>*/}
             <PlaceInputs places={placesToRender} />
             <CivilizationAdd civilizationprops={civilizationprops} />
             

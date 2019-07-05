@@ -1,3 +1,11 @@
+/* 
+Author: Sebastian Mancipe
+Date: May 20 - 2019
+Last update: July 5 - 2019
+Description: 
+This component contains the mutation to create a new civilization and allows the creation
+of its places. 
+*/
 import React, { Component } from 'react'
 import { Mutation } from "react-apollo"
 import { gql } from 'apollo-boost'
@@ -31,7 +39,6 @@ class CivilizationAdd extends Component {
   }
 
   handleSubmit(id) {
-    console.log("Completed mutation, reponse " + id)
     this.setState({ id_civ: id })
   }
 
@@ -44,17 +51,17 @@ class CivilizationAdd extends Component {
       places: places
     }
     return (
-      //This mutation creates the Civilization
+      //This mutation creates the Civilization and allows the creation of the places from the civilization
       <Mutation mutation={CIV_MUT}
         variables={{ Name: civilizationName, Description: civilizationDescription }}
         update={(cache, { data: { newCivilization } }) => {
           this.handleSubmit(newCivilization.Id)
-          console.log(newCivilization.Id)
         }
         }>
         {/*If the mutation is completed, call the PlacesAdd component to create the places with the civilization's id response*/}
         {(handleSubmit, { data, error }) => (
             <div>
+            {/*The button execute the submit and is only active when exists information in the form of civilization*/}
               <Button variant="primary" style={admin_buttons_style} 
               disabled={!(this.props.civilizationprops.civilization_name && this.props.civilizationprops.civilization_description)} 
               onClick={handleSubmit}>Guardar</Button>

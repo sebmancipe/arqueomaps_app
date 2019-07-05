@@ -1,3 +1,12 @@
+/* 
+Author: Sebastian Mancipe
+Date: 
+Last update: July 3 - 2019
+Description: 
+This component is used to add multiples places to a specific civilization. 
+Uses the PlaceMutation component to acomplish this purpouse
+*/
+
 import React, { Component } from 'react'
 import { Mutation } from "react-apollo"
 import {gql} from 'apollo-boost'
@@ -28,6 +37,7 @@ class PlacesAdd extends Component {
     const handleDismiss = () => this.setState({ showAlert: !this.state.showAlert });
 
     const id_civ = Number(this.props.placesprops.id_civ), places_add = this.props.placesprops.places
+    
     return places_add.map(({ place_name, place_description, place_latitude, place_longitude, place_tag }) => {
         return (
           //This mutation creates the place based in the props sended by the CivilizationAdd component

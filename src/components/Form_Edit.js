@@ -1,3 +1,13 @@
+/* 
+Author: Sebastian Mancipe
+Date: May 24 - 2019
+Last update: July 5 - 2019
+Description: 
+This component shows the edit places section.
+Loads CivilizationList and PlacesList.
+Contains the main configuration of Apollo Client also
+*/
+
 import React, { Component } from 'react'
 import {Dropdown} from 'react-bootstrap'
 import config from '../others/config'

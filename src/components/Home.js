@@ -1,3 +1,12 @@
+/* 
+Author: Sebastian Mancipe
+Date: May 21 - 2019
+Last update: July 5 - 2019
+Description: 
+This component shows the main page. 
+Loads BackgroundSlideshow component to change the background based in the images loaded below
+*/
+
 import React, { Component } from 'react'
 import BackgroundSlideshow from 'react-background-slideshow'
 import {NavLink} from 'react-router-dom'

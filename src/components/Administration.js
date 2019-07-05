@@ -1,3 +1,11 @@
+/* 
+  Author: Sebastian Mancipe
+  Date: May 23 - 2019
+  Last update: July 5 - 2019
+  Description: 
+  This component loads the main page of the civilizations administration
+  IMPORTANT: All the related components from this has the bug of the cut-off page  
+*/
   import React, { Component } from 'react'
   import { Button, ButtonToolbar} from 'react-bootstrap'
   import {NavLink} from 'react-router-dom'
@@ -24,7 +32,7 @@
             <NavLink to="/add"><Button variant="primary" style={admin_buttons_style}>Crear</Button></NavLink>
             <NavLink to="/edit"><Button variant="primary" style={admin_buttons_style}>Editar</Button></NavLink>
             <NavLink to="/view"><Button variant="primary" style={admin_buttons_style}>Ver</Button></NavLink>
-      </ButtonToolbar>
+        </ButtonToolbar>
         </div>
       );
     }

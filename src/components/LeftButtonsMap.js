@@ -11,15 +11,7 @@ class LeftButtonsMap extends Component{
       e.target.longitude.value,
       e.target.textname.value)
   }
-
-  showPolyline = (e) =>{
-    e.preventDefault()
-    this.props.LeftButtonsMapProps.generatePolyline()
-  }
     
-    
-  
-
   render() {
     return(
       <ButtonGroup vertical className="buttonGroupVertical">
@@ -29,9 +21,9 @@ class LeftButtonsMap extends Component{
             <Form onSubmit={this.renderMarker}>
             <Form.Group controlId="form" >
               <Form.Label>Latitud</Form.Label>
-              <Form.Control size="sm" type="number" step="0.000001" placeholder="Latitud" name="latitude" className="latitude"/>
+              <Form.Control size="sm" type="number" step="0.0000000001" placeholder="Latitud" name="latitude" className="latitude"/>
               <Form.Label size="sm">Longitud</Form.Label>
-              <Form.Control size="sm" type="number" step="0.000001" placeholder="Longitud" name="longitude" className="longitude"/>
+              <Form.Control size="sm" type="number" step="0.0000000001" placeholder="Longitud" name="longitude" className="longitude"/>
               <Form.Label size="sm">Nombre</Form.Label>
               <Form.Control size="sm" type="text" placeholder="Nombre" name="textname" className="textname" />
             </Form.Group>
@@ -42,7 +34,7 @@ class LeftButtonsMap extends Component{
         </Popover>
 
         }>
-          <Button variant="success" onClick={this.showPolyline}>Add</Button>
+          <Button variant="success">Add</Button>
         </OverlayTrigger>
         <OverlayTrigger trigger="click" placement="right" >
           <Button variant="success">Save</Button>

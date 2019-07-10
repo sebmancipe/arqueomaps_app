@@ -10,9 +10,6 @@ and open the template in the editor.
 /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
 
-
-       
-
       #map {
           height: 100%;
           position: relative;
@@ -32,8 +29,9 @@ and open the template in the editor.
       }
 
       .buttonGroupHorizontal{
-        left: 50%;
-        bottom: -320px;
+        left: 0%;
+        bottom: 0%;
+        top: 94%;
         z-index: 100;
       }
 

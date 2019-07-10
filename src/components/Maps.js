@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import config from '../others/config.js'
 import LeftButtonsMap from './LeftButtonsMap'
 import BottomButtonsMap from './BottomButtonsMap'
-import { Map, GoogleApiWrapper, Marker, Polyline } from 'google-maps-react';
+import { Map, GoogleApiWrapper, Marker, Polyline } from 'google-maps-react'
 import '../styles/map.css'
-import normalize from 'react-style-reset';
-import { injectGlobal } from 'emotion';
 
 
 
@@ -21,16 +19,12 @@ const mapStyles = {
 };
 
 
-const AnyReactComponent = ({ id, text_mark }) => <div key={id}>{text_mark}</div>
-
-
-
 class MapView extends Component {
   constructor(props) {
     super(props);
     this.state = {
       markers: [{ lat: '', lng: '', text_mark: "" }],
-      markers2Poly: [{lat:17.5, lng:16.2}, {lat:19.5, lng:17.2}],
+      markers2Poly: [{lat:'', lng:''}],
       center: {
         lat: 15.5,
         lng: 45.5
@@ -39,12 +33,14 @@ class MapView extends Component {
       firstTimeMarkers: true,
       drawPolylines: false,
     }
-    this.generatePolyline = this.generatePolyline.bind(this)
+    //this.generatePolyline = this.generatePolyline.bind(this)
+
   }
 
   generatePolyline(){
     this.setState({drawPolylines: (this.state.drawPolylines)?false:true})
   }
+
 
   addMarker(latitude, longitude, text) {
     let markers
@@ -70,16 +66,18 @@ class MapView extends Component {
         lng: Number(longitude)
       }
     });
-    let zoom = 6
+    let zoom = 2
     this.setState({ zoom })
   }
 
   render() {
     const LeftButtonsMapProps = {
-      addMarker: this.addMarker.bind(this),
-      generatePolyline: this.generatePolyline
+      addMarker: this.addMarker.bind(this)
     }
-    console.log(this.state.markers)
+    const BottomButtonsMapProps = {
+      generatePolyline: this.generatePolyline.bind(this)
+    }
+
     return (
       <div>
         <LeftButtonsMap LeftButtonsMapProps={LeftButtonsMapProps} />
@@ -88,12 +86,14 @@ class MapView extends Component {
           center={this.state.center}
           zoom={this.state.zoom}
           initialCenter={{
-            lat: -1.2884,
-            lng: 36.8233
+            lat: 4.624335,
+            lng: -74.063644
           }}
+          //mapTypeId={this.props.google.maps.mapTypeId.TERRAIN}
         >
-        {/*<BottomButtonsMap/>*/}
+        <BottomButtonsMap BottomButtonsMapProps={BottomButtonsMapProps}/>
         {this.state.markers.map((marker, i) => {
+          if(marker.lat !== '') 
           return (
             <Marker
               position={
@@ -106,10 +106,7 @@ class MapView extends Component {
             />
           )
         })}
-        
-        <Polyline path={this.state.markers2Poly}
-                                                 strokeColor="#0000FF"/>    
-        
+        {this.state.drawPolylines && this.state.markers2Poly[0].lat !== '' && <Polyline path={this.state.markers2Poly} strokeColor="#0000FF"/>}    
         </Map>
       </div>
     );

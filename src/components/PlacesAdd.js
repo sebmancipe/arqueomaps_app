@@ -15,7 +15,7 @@ import {Alert} from 'react-bootstrap'
 
 
 const PLAC_MUT = gql`
-  mutation newPlace($Name: String!, $Description: String!, $Latitude: String!, $Longitude: String!, $Tag: String!, $Civilization: Int!) {
+  mutation newPlace($Name: String!, $Description: String!, $Latitude: String!, $Longitude: String!, $Tag: String!, $Civilization: Int) {
     newPlace(Name:$Name,Description:$Description,Latitude:$Latitude,Longitude:$Longitude,Tag:$Tag,Civilization: $Civilization) {
       Id
       Name

@@ -14,6 +14,22 @@ import BottomButtonsMap from './BottomButtonsMap'
 import { Map, GoogleApiWrapper, Marker, Polyline } from 'google-maps-react'
 import '../styles/map.css'
 
+// 1
+import { ApolloProvider } from 'react-apollo'
+import { ApolloClient } from 'apollo-client'
+import { createHttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+
+const httpLink = createHttpLink({
+  uri: config.HOST
+})
+
+// 3
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache()
+})
+
 /*const mapStyles = {
   width: '100vh',
   height: '100%'
@@ -25,13 +41,14 @@ class MapView extends Component {
     super(props);
     //Load basic markers for testing purpose
     this.state = {
-      markers: [{ lat: '5.6494393', lng: '-73.5163933', text_mark: "Desierto El Infiernito" },
-                { lat: '4.977777', lng: '-73.775097', text_mark: "Laguna de Guatavita" },
-                { lat: '5.709184', lng: '-72.923647', text_mark: "Templo del Sol" },
-                { lat: '4.598083', lng: '-74.076043', text_mark: "Plaza Simón Bolivar" }],
-      markers2PolyStack: [{lat:'', lng:'',dist:''}],
-      markers2PolyManually: [{lat:'', lng:'', dist:''}],
-      markers2PolyMany2One: [{lat:'', lng:'', dist:''}],
+      markers:[{id:'',lat:'',lng:'',text_mark:''}],
+      /*markers: [{ id:'1',lat: '5.6494393', lng: '-73.5163933', text_mark: "Desierto El Infiernito" },
+                { id:'2',lat: '4.977777', lng: '-73.775097', text_mark: "Laguna de Guatavita" },
+                { id:'3',lat: '5.709184', lng: '-72.923647', text_mark: "Templo del Sol" },
+                { id:'4',lat: '4.598083', lng: '-74.076043', text_mark: "Plaza Simón Bolivar" }],*/
+      markers2PolyStack: [{id:'',lat:'', lng:'',dist:''}],
+      markers2PolyManually: [{id:'',lat:'', lng:'', dist:''}],
+      markers2PolyMany2One: [{id:'',lat:'', lng:'', dist:''}],
       center: {
         lat: 15.5,
         lng: 45.5
@@ -47,14 +64,24 @@ class MapView extends Component {
 
   generatePolylineStack(){
     this.setState({drawPolylinesStack: (this.state.drawPolylinesStack)?false:true})
+    //Set the other options in false
+    if(this.state.drawPolylinesStack) {
+      this.setState({drawPolylinesManually:false})
+      this.setState({drawPolylinesMany2One:false})
+    }
   }
 
   //Method that reset, show or no the polyline of manually input
   generatePolylineManually(isReset){
     this.setState({drawPolylinesManually: (this.state.drawPolylinesManually)?false:true})
     if(isReset){
-      let markers2PolyManually = [{lat:'',lng:'',dist:''}]
+      let markers2PolyManually = [{id:'',lat:'',lng:'',dist:''}]
       this.setState({markers2PolyManually})
+    }
+    //Set the other options in false
+    if(this.state.drawPolylinesManually) {
+      this.setState({drawPolylinesStack:false})
+      this.setState({drawPolylinesMany2One:false})
     }
   }
 
@@ -62,16 +89,22 @@ class MapView extends Component {
   generatePolylineMany2One(isReset){
     this.setState({drawPolylinesMany2One: (this.state.drawPolylinesMany2One)?false:true})
     if(isReset){
-      let markers2PolyMany2One = [{lat:'',lng:'',dist:''}]
+      let markers2PolyMany2One = [{id:'',lat:'',lng:'',dist:''}]
       this.setState({markers2PolyMany2One})
     } 
+    //Set the other options in false
+    if(this.state.drawPolylinesMany2One) {
+      this.setState({drawPolylinesStack:false})
+      this.setState({drawPolylinesManually:false})
+    }
   }
 
   //Method that join two markers with a polyline
-  markersJoinManually(props,marker,e){
+  markersJoinManually(markerSelected){
     var p2 = {
-      lat: props.position.lat,
-      lng: props.position.lng
+      id: markerSelected.id,
+      lat: markerSelected.lat,
+      lng: markerSelected.lng
     }
     let markers2PolyManually
     if(this.state.markers2PolyManually[0].lat!==''){
@@ -79,50 +112,49 @@ class MapView extends Component {
       markers2PolyManually=[...this.state.markers2PolyManually]
       //Get distance based in latitude and longitude of the markers
       distance=this.getDistance(markers2PolyManually[markers2PolyManually.length-1],p2)
-      markers2PolyManually.push({lat:Number(p2.lat), lng:Number(p2.lng),dist:Number(distance)})
+      markers2PolyManually.push({id:Number(p2.id),lat:Number(p2.lat), lng:Number(p2.lng),dist:Number(distance)})
     }
     else 
-      markers2PolyManually=[{lat:Number(p2.lat), lng:Number(p2.lng)}]
+      markers2PolyManually=[{id:Number(p2.id),lat:Number(p2.lat), lng:Number(p2.lng)}]
     this.setState({markers2PolyManually})
   }
 
   //Method that join all markers to one (the selected by the user)
-  markersJoinMany2One(props,marker,e){
-    var mainMarker = {
-      lat: props.position.lat,
-      lng: props.position.lng
-    }
+  markersJoinMany2One(markerSelected){
     let markers2PolyMany2One=[], markers = this.state.markers
     markers.forEach(function(marker){
-      markers2PolyMany2One.push({lat:Number(marker.lat),lng:Number(marker.lng)})
-      markers2PolyMany2One.push({lat:Number(mainMarker.lat),lng:Number(mainMarker.lng)})
+      markers2PolyMany2One.push({id:Number(marker.id),lat:Number(marker.lat),lng:Number(marker.lng)})
+      markers2PolyMany2One.push({id:Number(markerSelected.id),lat:Number(markerSelected.lat),lng:Number(markerSelected.lng)})
     });
     this.setState({markers2PolyMany2One})
   }
 
   
   onMarkerClick(props, marker, e){
+    const markersTemp = this.state.markers
+    const placeSelected = markersTemp.find(place => place.lat=== props.position.lat && place.lng === props.position.lng);
     if(this.state.drawPolylinesManually){
-      this.markersJoinManually(props,marker,e)
+      this.markersJoinManually(placeSelected)
     }else if(this.state.drawPolylinesMany2One)
-      this.markersJoinMany2One(props,marker,e)
+      this.markersJoinMany2One(placeSelected)
   }
 
 
-  addMarker(latitude, longitude, text) {
+  addMarker(id,latitude, longitude, text) {
     let markers
     let markers2PolyStack
     if(this.state.markers[0].lat === '') {
       markers = [this.state.markers]
       markers2PolyStack = [this.state.markers2PolyStack]
-      markers = [{ lat: latitude, lng: longitude, text_mark: text }]
-      markers2PolyStack = [{lat:Number(latitude), lng:Number(longitude)}]
+      markers = [{ id:id,lat: latitude, lng: longitude, text_mark: text }]
+      markers2PolyStack = [{id:Number(id),lat:Number(latitude), lng:Number(longitude)}]
+      console.log(markers)
     }
     else {
       markers = [...this.state.markers]
       markers2PolyStack = [...this.state.markers2PolyStack]
-      markers.push({ lat: latitude, lng: longitude, text_mark: text })
-      markers2PolyStack.push({lat:Number(latitude), lng:Number(longitude)})
+      markers.push({ id:id,lat: latitude, lng: longitude, text_mark: text })
+      markers2PolyStack.push({id:Number(id),lat:Number(latitude), lng:Number(longitude)})
     }
     this.setState({markers})
     this.setState({markers2PolyStack})
@@ -154,8 +186,13 @@ class MapView extends Component {
   
 
   render() {
+    let edgesFigure
+    if(this.state.drawPolylinesMany2One && this.state.markers2PolyMany2One[0].lat !== '') edgesFigure = this.state.markers2PolyMany2One
+    else if(this.state.drawPolylinesManually && this.state.markers2PolyManually[0].lat !== '') edgesFigure = this.state.markers2PolyManually
+    else edgesFigure = this.state.markers2PolyStack
     const LeftButtonsMapProps = {
-      addMarker: this.addMarker.bind(this)
+      addMarker: this.addMarker.bind(this),
+      edgesFigure: edgesFigure
     }
     const BottomButtonsMapProps = {
       generatePolylineStack: this.generatePolylineStack.bind(this),
@@ -164,7 +201,7 @@ class MapView extends Component {
     }
 
     return (
-      <section>
+      <ApolloProvider client={client}>
         <LeftButtonsMap LeftButtonsMapProps={LeftButtonsMapProps} />
         <Map
           google={this.props.google}
@@ -200,7 +237,7 @@ class MapView extends Component {
         {this.state.drawPolylinesMany2One && this.state.markers2PolyMany2One[0].lat !== '' 
         && <Polyline path={this.state.markers2PolyMany2One} strokeColor="#FF0000"/>}   
         </Map>
-      </section>
+      </ApolloProvider>
     );
   }
 }

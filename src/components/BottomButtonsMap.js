@@ -11,6 +11,7 @@ import React, {Component} from 'react'
 import {ButtonGroup, Button, Dropdown, DropdownButton} from 'react-bootstrap'
 import '../styles/map.css'
 
+
 class BottomButtonsMap extends Component{
   constructor(props){
     super(props);

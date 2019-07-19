@@ -42,8 +42,8 @@ class MainPage extends Component {
                 Administrar civilizaciones
               </Button></NavLink>
               <DropdownButton id="dropdown-basic-button" title="Lanzar el mapa">
-                 <Dropdown.Item href="/map"> Mapa libre </Dropdown.Item>
-                <Dropdown.Item>Mapa</Dropdown.Item>
+                 <Dropdown.Item href="/mapfree"> Mapa libre </Dropdown.Item>
+                <Dropdown.Item href="/map">Mapa</Dropdown.Item>
               </DropdownButton>
       		</form>
 

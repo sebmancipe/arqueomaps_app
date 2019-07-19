@@ -1,7 +1,7 @@
 /* 
 Author: Sebastian Mancipe
 Date: 
-Last update: July 18 - 2019
+Last update: July 19 - 2019
 Description: 
 This component contains the bottom section of buttons that reset, shows or allow the creation of 
 polylines based in the user input.
@@ -12,7 +12,7 @@ import { ButtonGroup, Button, Dropdown, DropdownButton } from 'react-bootstrap'
 import '../styles/map.css'
 
 
-class BottomButtonsMap extends Component {
+class BottomButtonsMapFree extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -62,4 +62,4 @@ class BottomButtonsMap extends Component {
   }
 }
 
-export default BottomButtonsMap
+export default BottomButtonsMapFree

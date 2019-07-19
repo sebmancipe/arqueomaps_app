@@ -1,7 +1,7 @@
 /* 
 Author: Sebastian Mancipe
 Date: July 18 - 2019
-Last update: July 18 - 2019
+Last update: July 19 - 2019
 Description: 
 This component contains the form and methods to add a Marker/Place (it also sends to server).
 Sends the information to its parent LeftButtonMap to render de marker.
@@ -13,7 +13,7 @@ import { gql } from "apollo-boost"
 import '../styles/map.css'
 
 const PLAC_CREATE = gql`
-  mutation newPlace($Name: String!, $Latitude: String!, $Longitude: String!) {
+  mutation newPlace($Name: String!, $Latitude: String!, $Longitude: String!, $Tag: String) {
     newPlace(Name:$Name,Latitude:$Latitude,Longitude:$Longitude) {
       Id
     }
@@ -25,7 +25,7 @@ class CreatePlaceMap extends React.Component {
         super(props);
         this.state = {
             place: {
-                name_place: '', lat_place: '', lng_place: ''
+                name_place: '', lat_place: '', lng_place: '',tag_place:''
             }
         }
     }
@@ -43,7 +43,8 @@ class CreatePlaceMap extends React.Component {
             Id,
             this.state.place.lat_place,
             this.state.place.lng_place,
-            this.state.place.name_place
+            this.state.place.name_place,
+            this.state.place.tag_place
         )
     }
 
@@ -60,12 +61,15 @@ class CreatePlaceMap extends React.Component {
                             <Form.Control size="sm" type="number" step="0.0000000001" placeholder="Longitud" name="lng_place" className="longitude" />
                             <Form.Label size="sm">Nombre</Form.Label>
                             <Form.Control size="sm" type="text" placeholder="Nombre" name="name_place" className="textname" />
+                            <Form.Label size="sm">Tag</Form.Label>
+                            <Form.Control size="sm" type="text" placeholder="Nombre" name="tag_place" className="textname" />
                         </Form.Group>
                         <Mutation mutation={PLAC_CREATE}
                             variables={{
                                 Name: this.state.place.name_place,
                                 Latitude: this.state.place.lat_place,
-                                Longitude: this.state.place.lng_place
+                                Longitude: this.state.place.lng_place,
+                                Tag: this.state.place.tag_place
                             }}
                             update={(cache,{ data: { newPlace } }) => {
                                 this.receivedPlace(newPlace.Id)

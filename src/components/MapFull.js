@@ -1,16 +1,16 @@
 /* 
 Author: Sebastian Mancipe
 Date: 
-Last update: July 18 - 2019
+Last update: July 19 - 2019
 Description: 
-This component contains the fast map, markers and polylines loaded on it. 
+This component contains the normal map, markers and polylines loaded on it from civilizations or tags. 
 Executes methods to get distance, join markers manually, by stack (arrive order) or to a specific point
 */
 
 import React, { Component } from 'react'
 import config from '../others/config.js'
 import LeftButtonsMap from './LeftButtonsMap'
-import BottomButtonsMap from './BottomButtonsMap'
+import BottomButtonsMapFree from './BottomButtonsMapFree'
 import { Map, GoogleApiWrapper, Marker, Polyline } from 'google-maps-react'
 import '../styles/map.css'
 
@@ -36,7 +36,7 @@ const client = new ApolloClient({
 };*/
 
 
-class MapView extends Component {
+class MapFull extends Component {
   constructor(props) {
     super(props);
     //Load basic markers for testing purpose
@@ -164,39 +164,22 @@ class MapView extends Component {
 
   //Adds a marker in the map and update both, marker and markers2PolyStack.
   //Also moves the view to the marker created in the map
-  addMarker(id, latitude, longitude, text) {
-    var p2 = {
-      id: id,
-      lat: latitude,
-      lng: longitude,
-      text: text
-    }
+  addMarker(places) {
     let markers
-    let markers2PolyStack
-    if (this.state.markers[0].lat === '') {
-      markers = [this.state.markers]
-      markers2PolyStack = [this.state.markers2PolyStack]
-      markers = [{ id: p2.id, lat: p2.lat, lng: p2.lng, text_mark: p2.text }]
-      markers2PolyStack = [{ id: Number(p2.id), lat: Number(p2.lat), lng: Number(p2.lng) }]
-    }
-    else {
-      let distance
-      markers = [...this.state.markers]
-      markers2PolyStack = [...this.state.markers2PolyStack]
-      distance = this.getDistance(markers[markers.length - 1], p2)
-      markers.push({ id: p2.id, lat: p2.lat, lng: p2.lng, text_mark: p2.text })
-      markers2PolyStack.push({ id: Number(p2.id), lat: Number(p2.lat), lng: Number(p2.lng), dist: Number(distance) })
-    }
-    this.setState({ markers })
-    this.setState({ markers2PolyStack })
-    this.setState({
-      center: {
-        lat: Number(latitude),
-        lng: Number(longitude)
+    if(this.state.markers[0].id==='') markers=[]
+    else markers=[...this.state.markers]
+    places.forEach((place,index,array)=>{
+      var p2 = {
+        id: place.Id,
+        lat: place.Latitude,
+        lng: place.Longitude,
+        text: place.Name,
+        tag: place.Tag
       }
-    });
-    let zoom = 10
-    this.setState({ zoom })
+      if(markers.filter(marker => (marker.id===p2.id)).length===0) //Avoid duplicates
+      markers.push({ id: p2.id, lat: p2.lat, lng: p2.lng, text_mark: p2.text,tag:p2.tag })
+    })
+    this.setState({ markers })
   }
 
   //Utilities: Convert from grad to rad
@@ -249,7 +232,7 @@ class MapView extends Component {
           }}
           mapTypeControl={false}
         >
-          <BottomButtonsMap BottomButtonsMapProps={BottomButtonsMapProps} />
+          <BottomButtonsMapFree BottomButtonsMapProps={BottomButtonsMapProps} />
           {this.state.markers.map((marker, i) => {
             if (marker.lat !== '')
               return (
@@ -280,5 +263,5 @@ class MapView extends Component {
 
 export default GoogleApiWrapper({
   apiKey: (config.API_KEY)
-})(MapView)
+})(MapFull)
 // https://istarkov.github.io/google-map-thousands-markers/

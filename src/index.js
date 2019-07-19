@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import MapView from './components/Maps'
+import MapFull from './components/MapFull'
+import MapFree from './components/MapFree'
 import MainPage from './components/Home'
 import Form_Edit from './components/Form_Edit'
 //import View from './components/View'
@@ -16,10 +17,11 @@ class Core extends Component {
       <BrowserRouter>
         <Switch>
           <Route path="/" component={MainPage} exact />
-          <Route path="/map" component={MapView} />
+          <Route path="/mapfree" component={MapFree} />
+          <Route path="/map" component={MapFull} />
           <Route path="/add" component={Form_Add} />
           <Route path="/edit" component={Form_Edit} />
-          <Route path="/view" component={MapView} />
+          <Route path="/view" component={MapFree} />
           <Route path="/admin" component={AdministrationView}/>
           <Route component={Error}/>
         </Switch>

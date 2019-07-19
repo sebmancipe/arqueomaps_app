@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import MapView from './components/Maps'
+import MapView from './components/View'
 import MainPage from './components/Home'
 import Form_Edit from './components/Form_Edit'
 //import View from './components/View'

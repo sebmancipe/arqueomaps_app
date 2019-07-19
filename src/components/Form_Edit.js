@@ -77,7 +77,7 @@ class Form_Edit extends Component{
         </div>
       </ApolloProvider>
     );
-}
-}
+    }
+  }
 
 export default Form_Edit;

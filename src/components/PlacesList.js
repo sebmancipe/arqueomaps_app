@@ -52,7 +52,7 @@ class PlacesList extends Component {
   Then check if some input based in the class name has been changed
   And update the value in the position of the place and in the attribute changed.
   The attribute's name is modified to the values in the server-side to avoid conflicts 
-   */
+  */
   handleChange = (e, place) => {
     var targetRealClassName = e.target.className.replace(' form-control', '')
     if (["place_name", "place_description", "place_latitude", "place_longitude", "place_tag"].includes(targetRealClassName)) {

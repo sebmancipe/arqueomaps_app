@@ -1,10 +1,10 @@
 /* 
 Author: Sebastian Mancipe
-Date: 
-Last update: July 3 - 2019
+Date: July 18 - 2019
+Last update: July 18 - 2019
 Description: 
-This component execute the mutation of the Place (create a place) in the componentDidMount method. 
-The component is called from PlacesAdd. The return method has not been implemented yet. 
+This component execute the mutation of the Edge (create an edge) in the componentDidMount method. 
+The component is called from LeftButtonsMap. The return method has not been implemented yet. 
 Should return an error or a complete message
 */
 import React from 'react'

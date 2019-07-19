@@ -1,26 +1,21 @@
-import React, {Component} from 'react'
-import {ButtonGroup, OverlayTrigger, Button, Form, Popover,Alert} from 'react-bootstrap'
-import {Mutation} from "react-apollo"
-import {gql} from "apollo-boost"
+/* 
+Author: Sebastian Mancipe
+Date: 
+Last update: July 18 - 2019
+Description: 
+This component contains the main form to the left buttons menu to add a place an a figure.
+Also creates the Edges of the figure.
+Uses children components as CreateFigureMap and CreatePlaceMap.
+*/
+
+import React, { Component } from 'react'
+import { ButtonGroup } from 'react-bootstrap'
+import { Mutation } from "react-apollo"
+import { gql } from "apollo-boost"
 import EdgeMutation from "./EdgeMutation"
+import CreatePlaceMap from "./CreatePlaceMap"
+import CreateFigureMap from "./CreateFigureMap"
 import '../styles/map.css'
-
-
-
-const FIG_CREATE = gql`
-  mutation newFigure($Name: String!, $Description: String!, $Author: String!, $CreationDate:String!){
-    newFigure(Name:$Name, Description:$Description, Author:$Author, CreationDate:$CreationDate){
-      Id
-    }
-  }
-  `
-const PLAC_CREATE = gql`
-  mutation newPlace($Name: String!, $Latitude: String!, $Longitude: String!) {
-    newPlace(Name:$Name,Latitude:$Latitude,Longitude:$Longitude) {
-      Id
-    }
-  }
-`
 
 const EDGE_CREATE = gql`
   mutation setEdge($Id_figure: Int!, $Id_placeFrom: Int!, $Id_placeTo: Int!, $Dist: String!) {
@@ -28,172 +23,103 @@ const EDGE_CREATE = gql`
   }
 `
 
-class LeftButtonsMap extends Component{
-  constructor(props){
+class LeftButtonsMap extends Component {
+  constructor(props) {
     super(props);
-    this.state ={
-      figure:{
-        id_figure:'',name_figure:'',description_figure:'',area_figure:'',author_figure:'',date_figure:''
-      },
-      place:{
-        id_place:'', name_place:'',lat_place:'',lng_place:''
-      }
+    this.state = {
+      id_figure: ''
     }
   }
 
-  componentDidMount(){
-    var date = new Date()
-    var formattedDate = date.getDate()+" - "+(date.getMonth()+1)+" - "+date.getFullYear()
-    let figure = this.state.figure
-    figure['date_figure']=formattedDate
-    this.setState({figure})
+  //Sets the id_figure to '' or undefined when is reseted the map
+  componentWillReceiveProps(nextProps) {
+    this.setState({ id_figure: nextProps.id_figure })
   }
 
-  renderMarker(){
+  renderMarker(Id, lat, lng, name) {
     this.props.LeftButtonsMapProps.addMarker(
-      this.state.place.id_place,
-      this.state.place.lat_place,
-      this.state.place.lng_place,
-      this.state.place.name_place)
+      Id, lat, lng, name)
   }
 
-  changeFigure = (e) =>{
-    let figure = this.state.figure
-    figure[e.target.name]=e.target.value
-    this.setState({figure})
+  receivedFigure(Id) {
+    this.setState({ id_figure: Id })
   }
 
-  changePlace = (e) =>{
-    let place = this.state.place
-    place[e.target.name] = e.target.value
-    this.setState({place})
+  receivedPlace(Id, lat, lng, name) {
+    this.renderMarker(Id, lat, lng, name)
   }
 
-  receivedFigure(Id){
-    let figure = this.state.figure
-    figure['id_figure']=Id
-    this.setState({figure})
-  }
 
-  receivedPlace(Id){
-    console.log(Id)
-    let place = this.state.place
-    place['id_place']=Id
-    this.setState({place})
-    this.renderMarker()
-  }
-  
-  
   render() {
-  const edgesFigure = this.props.LeftButtonsMapProps.edgesFigure
-   if(edgesFigure[0]['id']!=='' && this.state.figure.id_figure!=='') {
-     return edgesFigure.map((edge,index,array) => {
-      if(index<(array.length-1)){
+    const edgesFigure = this.props.LeftButtonsMapProps.edgesFigure
+    const createPlaceMapProps = {
+      receivedPlace: this.receivedPlace.bind(this)
+    }
+    const createFigureMapProps = {
+      receivedFigure: this.receivedFigure.bind(this)
+    }
+    
+    //Check if the figure has already been created (with the id) and if the length of the array is enought to create edges
+    //Figures with only two edges wont be able to be saved
+    if (edgesFigure.length > 3 && this.state.id_figure !== undefined && typeof this.state.id_figure !== 'undefined') {
+      //edgesArray contains the structure of and edge: id_figure, id_placeFrom, id_placeTo, dist
+      const edgesArray = []
+      //If the figure is Many2One, the edge has a different structure than Stack or Manually (distances primarily)
+      if (edgesFigure.typeJoin === 'Many2One') {
+        let i, j
+        for (i = 0, j = 0; i < edgesFigure.length - 1; i = i + 2, j++) {
+          let temp = {};
+          temp.Id_figure = this.state.id_figure
+          temp.Id_placeFrom = edgesFigure[i].id
+          temp.Id_placeTo = edgesFigure[i + 1].id
+          temp.Dist = edgesFigure[i + 1].dist
+          edgesArray[j] = temp
+        }
+      } else {
+      //Else, a normal structure
+        let i
+        for (i = 0; i < edgesFigure.length - 1; i++) {
+          let temp = {};
+          temp.Id_figure = this.state.id_figure
+          temp.Id_placeFrom = edgesFigure[i].id
+          temp.Id_placeTo = edgesFigure[i + 1].id
+          temp.Dist = edgesFigure[i + 1].dist
+          edgesArray[i] = temp
+        }
+      }
+
+      //Mutation loaded in a var to allow return the left menu
+      var mutations = edgesArray.map((edge, index) => {
         return (
           <Mutation key={index} mutation={EDGE_CREATE}
-          variables={{Id_figure:this.state.figure.id_figure,
-                      Id_placeFrom: edge.id,
-                      Id_placeTo: array[index+1].id,
-                      Dist:0}
-          }>
-          {(submitEdge , {data,error}) => (
-            <EdgeMutation mutate={submitEdge}/>
-          )}
+            variables={{
+              Id_figure: edge.Id_figure,
+              Id_placeFrom: edge.Id_placeFrom,
+              Id_placeTo: edge.Id_placeTo,
+              Dist: edge.Dist
+            }}>
+            {(submitEdge, { data, error }) => (
+              <EdgeMutation mutate={submitEdge} />
+            )}
           </Mutation>
         )
-      }
-      else return null
-     })
+      });
+      //Execution of the mutations with the left menu
+      return (
+        <ButtonGroup vertical className="buttonGroupVertical">
+          {mutations}
+          <CreatePlaceMap createPlaceMapProps={createPlaceMapProps} />
+          <CreateFigureMap createFigureMapProps={createFigureMapProps} />
+        </ButtonGroup>
+      )
     }
-    else
-    return(
-      <ButtonGroup vertical className="buttonGroupVertical">
-        <OverlayTrigger trigger="click" placement="right" overlay={
-          <Popover id="popover-basic" title="Agrega una nueva ubicación" className="markersForm">
-            <Form onChange={this.changePlace}>
-            <Form.Group controlId="form" >
-              <Form.Label>Latitud</Form.Label>
-              <Form.Control size="sm" type="number" step="0.0000000001" placeholder="Latitud" name="lat_place" className="latitude"/>
-              <Form.Label size="sm">Longitud</Form.Label>
-              <Form.Control size="sm" type="number" step="0.0000000001" placeholder="Longitud" name="lng_place" className="longitude"/>
-              <Form.Label size="sm">Nombre</Form.Label>
-              <Form.Control size="sm" type="text" placeholder="Nombre" name="name_place" className="textname" />
-            </Form.Group>
-            {/*<Button variant="primary" type="submit" /*onClick={submitPlace}*//*>
-              Add
-            </Button>*/}
-            <Mutation mutation={PLAC_CREATE}
-          variables={{Name: this.state.place.name_place, 
-                      Latitude: this.state.place.lat_place,
-                      Longitude: this.state.place.lng_place}}
-          update={(cache,{data: { newPlace } }) => {
-                    this.receivedPlace(newPlace.Id)
-                  }}>
-          {(submitPlace , {error}) => (
-            <div>
-            <Button variant="primary" type="button" onClick={submitPlace}>
-              Add
-            </Button>
-            {error && 
-                <Alert variant='danger'>
-                Ha ocurrido un error...
-            </Alert>} 
-            </div>
-          )}
-          </Mutation>
-          </Form> 
-          
-        </Popover>
-
-        }><Button variant="success">Add</Button>
-        </OverlayTrigger>
-
-        {/* Save figure */}
-          <OverlayTrigger trigger="click" placement="right" overlay={
-          <Popover id="popover-basic" title="Describe la figura a guardar" className="figureForm">
-            <Form onChange={this.changeFigure}>
-            <Form.Group controlId="form" >
-              <Form.Label>Nombre</Form.Label>
-              <Form.Control size="sm" type="text" placeholder="Nombre" name="name_figure" className="textname"/>
-              <Form.Label size="sm">Descripción</Form.Label>
-              <Form.Control size="sm" type="text" placeholder="Descripción" name="description_figure" className="textdescription"/>
-              <Form.Label size="sm">Autor</Form.Label>
-              <Form.Control size="sm" type="text" placeholder="Autor" name="author_figure" className="textauthor" />
-            </Form.Group>
-          </Form>
-
-          <Mutation mutation={FIG_CREATE}
-          variables={{Name: this.state.figure.name_figure, 
-                      Description: this.state.figure.description_figure,
-                      Author: this.state.figure.author_figure,
-                      CreationDate: this.state.figure.date_figure}}
-          update={(cache,{data: { newFigure } }) => {
-                    this.receivedFigure(newFigure.Id)
-                  }}>
-          
-          {(submitFigure , {error}) => (
-            <div>
-            <Button variant="primary" onClick={submitFigure}>
-              Save
-            </Button>
-            {error && 
-                <Alert variant='danger'>
-                Ha ocurrido un error...
-            </Alert>} 
-            </div>
-          )}
-          </Mutation>
-
-        </Popover>
-
-        }><Button variant="success">Save</Button>
-        </OverlayTrigger>
-        
-        <OverlayTrigger trigger="click" placement="right" >
-          <Button variant="success">See</Button>
-        </OverlayTrigger>
-      </ButtonGroup>
-    )
+    else //If the condition is not satisfied, return the left menu  
+      return (
+        <ButtonGroup vertical className="buttonGroupVertical">
+          <CreatePlaceMap createPlaceMapProps={createPlaceMapProps} />
+          <CreateFigureMap createFigureMapProps={createFigureMapProps} />
+        </ButtonGroup>
+      )
   }
 
 }

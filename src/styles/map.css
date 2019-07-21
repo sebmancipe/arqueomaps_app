@@ -9,6 +9,7 @@ and open the template in the editor.
 */
 /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
+
       #map {
           height: 100%;
           position: relative;
@@ -19,6 +20,19 @@ and open the template in the editor.
           height: 100%;
           margin: 0 ;
           padding: 0;
+          display: ruby-base-container;
+      }
+
+      .buttonGroupVertical {
+        top:130px;
+        z-index: 100;
+      }
+
+      .buttonGroupHorizontal{
+        left: 0%;
+        bottom: 0%;
+        top: 94%;
+        z-index: 100;
       }
 
       #content{

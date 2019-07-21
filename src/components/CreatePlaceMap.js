@@ -14,7 +14,7 @@ import '../styles/map.css'
 
 const PLAC_CREATE = gql`
   mutation newPlace($Name: String!, $Latitude: String!, $Longitude: String!, $Tag: String) {
-    newPlace(Name:$Name,Latitude:$Latitude,Longitude:$Longitude) {
+    newPlace(Name:$Name,Latitude:$Latitude,Longitude:$Longitude,Tag:$Tag) {
       Id
     }
   }

@@ -103,9 +103,11 @@ class MapFull extends Component {
     }
   }
 
-  //Method called from BottomButtonsMap that resets all states except markers
+  //Method called from BottomButtonsMap that resets all states
   //Here its reseted the id_figure to avoid resend with the same id
   resetAll() {
+    let markers = [{ id: '', lat: '', lng: '', dist: '' }]
+    this.setState({markers})
     let markers2PolyMany2One = [{ id: '', lat: '', lng: '', dist: '' }]
     this.setState({ markers2PolyMany2One })
     let markers2PolyManually = [{ id: '', lat: '', lng: '', dist: '' }]

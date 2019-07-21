@@ -10,7 +10,7 @@ Loads BackgroundSlideshow component to change the background based in the images
 import React, { Component } from 'react'
 import BackgroundSlideshow from 'react-background-slideshow'
 import {NavLink} from 'react-router-dom'
-import {Button,DropdownButton, Dropdown} from 'react-bootstrap'
+import {Button,DropdownButton, Dropdown, Container} from 'react-bootstrap'
 import '../styles/main.css'
 
 /*
@@ -27,47 +27,40 @@ const images= [
   image3
 ]
 
-const text_style ={
-  color: '#ffffff'
-}
 class MainPage extends Component {
 
   render() {
     return (
-      <section className="wrapper">
-          <div>
-          {/*Carousel was getting from https://www.npmjs.com/package/react-background-slideshow*/}
-            <BackgroundSlideshow images={images} animationDelay={5000}/>
-          </div>
-
-        <div className="content">
+      <div>  
+      <BackgroundSlideshow images={images} animationDelay={5000}/>
+      <Container id="main_container">
           <header id="header">
             <h1>¡Bienvenido a ArqueoMaps!</h1>
-            <p style={text_style}>¿Qué deseas hacer?</p>
+            <p>¿Qué deseas hacer?</p>
           </header>
 
-          <form id="signup-form"  action="#">
-      				<NavLink to="/admin"> <Button variant="primary" type="button">
-                Administrar civilizaciones
-              </Button></NavLink>
-              <DropdownButton id="dropdown-basic-button" title="Lanzar el mapa">
+          <Container id="selection_container">
+          <NavLink to="/admin" id="admin_button"> <Button variant="primary" type="button">
+                Administrar civilizaciones</Button>
+          </NavLink>
+          <DropdownButton id="map_button" title="Lanzar el mapa">
                  <Dropdown.Item href="/mapfree"> Mapa libre </Dropdown.Item>
-                <Dropdown.Item href="/map">Mapa</Dropdown.Item>
-              </DropdownButton>
-      		</form>
+                 <Dropdown.Item href="/map">Mapa</Dropdown.Item>
+          </DropdownButton>
+          </Container>
+      		
 
-          <footer id="footer">
+          <Container id="footer">
     				<ul className="icons">
-             <li><a href="https://www.facebook.com/SarosColombia/" target="_blank" rel="noopener noreferrer" className="icon fa-facebook-f"><span className="label">Twitter</span></a></li>
-    					<li><a href="https://www.instagram.com/sarosastromath/" target="_blank" rel="noopener noreferrer" className="icon fa-instagram"><span className="label">Instagram</span></a></li>
-    					<li><a href="https://www.instagram.com/sarosastromath/" className="icon fa-envelope-o"><span className="label">Email</span></a></li>
+             <li><a href="https://www.facebook.com/SarosColombia/" target="_blank" rel="noopener noreferrer"><span className="fa fa-facebook">Facebook</span></a></li>
+    					<li><a href="https://www.instagram.com/sarosastromath/" target="_blank" rel="noopener noreferrer"><span className="fa fa-instagram">Instagram</span></a></li>
+    					<li><a href="https://www.instagram.com/sarosastromath/" target="_blank" rel="noopener noreferrer"><span className="fa fa-google">Email</span></a></li>
     				</ul>
-    				<ul className="copyright">
-    					<li>&copy; Untitled.</li><li>Credits: <a href="http://html5up.net">HTML5 UP</a></li>
-    				</ul>
-    		 </footer>
-        </div>
-      </section>
+            <div id="orientation_message">Se recomienda usar una orientación horizontal y/o agrandar la pantalla</div>
+    		 </Container>
+         
+      </Container>     
+      </div>
     )
   }
 }

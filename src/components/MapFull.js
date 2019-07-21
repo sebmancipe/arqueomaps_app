@@ -12,13 +12,14 @@ import config from '../others/config.js'
 import LeftButtonsMap from './LeftButtonsMap'
 import BottomButtonsMapFree from './BottomButtonsMapFree'
 import { Map, GoogleApiWrapper, Marker, Polyline } from 'google-maps-react'
-import '../styles/map.css'
+
 
 // Imports to apollo-client and connection to graphql
 import { ApolloProvider } from 'react-apollo'
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
+import '../styles/map_full.css'
 
 const httpLink = createHttpLink({
   uri: config.HOST
@@ -29,12 +30,6 @@ const client = new ApolloClient({
   link: httpLink,
   cache: new InMemoryCache()
 })
-
-/*const mapStyles = {
-  width: '100vh',
-  height: '100%'
-};*/
-
 
 class MapFull extends Component {
   constructor(props) {
@@ -75,12 +70,12 @@ class MapFull extends Component {
   //Method that reset, show or no the polyline of manually input
   generatePolylineManually(isReset) {
     if (isReset) {
-      this.setState({ drawPolylinesManually:false})
+      this.setState({ drawPolylinesManually: false })
       let markers2PolyManually = [{ id: '', lat: '', lng: '', dist: '' }]
       this.setState({ markers2PolyManually })
-    }else
+    } else
       this.setState({ drawPolylinesManually: (this.state.drawPolylinesManually) ? false : true })
-    
+
     //Set the other options in false
     if (this.state.drawPolylinesManually) {
       this.setState({ drawPolylinesStack: false })
@@ -90,12 +85,12 @@ class MapFull extends Component {
 
   //Method that reset, show or no the polyline of many to one input
   generatePolylineMany2One(isReset) {
-    if (isReset){
-      this.setState({ drawPolylinesMany2One:false})
+    if (isReset) {
+      this.setState({ drawPolylinesMany2One: false })
       let markers2PolyMany2One = [{ id: '', lat: '', lng: '', dist: '' }]
       this.setState({ markers2PolyMany2One })
-    }else
-      this.setState({drawPolylinesMany2One: (this.state.drawPolylinesMany2One) ? false:true})
+    } else
+      this.setState({ drawPolylinesMany2One: (this.state.drawPolylinesMany2One) ? false : true })
     //Set the other options in false
     if (this.state.drawPolylinesMany2One) {
       this.setState({ drawPolylinesStack: false })
@@ -107,7 +102,7 @@ class MapFull extends Component {
   //Here its reseted the id_figure to avoid resend with the same id
   resetAll() {
     let markers = [{ id: '', lat: '', lng: '', dist: '' }]
-    this.setState({markers})
+    this.setState({ markers })
     let markers2PolyMany2One = [{ id: '', lat: '', lng: '', dist: '' }]
     this.setState({ markers2PolyMany2One })
     let markers2PolyManually = [{ id: '', lat: '', lng: '', dist: '' }]
@@ -168,9 +163,9 @@ class MapFull extends Component {
   //Also moves the view to the marker created in the map
   addMarker(places) {
     let markers
-    if(this.state.markers[0].id==='') markers=[]
-    else markers=[...this.state.markers]
-    places.forEach((place,index,array)=>{
+    if (this.state.markers[0].id === '') markers = []
+    else markers = [...this.state.markers]
+    places.forEach((place, index, array) => {
       var p2 = {
         id: place.Id,
         lat: place.Latitude,
@@ -178,8 +173,8 @@ class MapFull extends Component {
         text: place.Name,
         tag: place.Tag
       }
-      if(markers.filter(marker => (marker.id===p2.id)).length===0) //Avoid duplicates
-      markers.push({ id: p2.id, lat: p2.lat, lng: p2.lng, text_mark: p2.text,tag:p2.tag })
+      if (markers.filter(marker => (marker.id === p2.id)).length === 0) //Avoid duplicates
+        markers.push({ id: p2.id, lat: p2.lat, lng: p2.lng, text_mark: p2.text, tag: p2.tag })
     })
     this.setState({ markers })
   }
@@ -223,8 +218,7 @@ class MapFull extends Component {
 
     return (
       <ApolloProvider client={client}>
-        <LeftButtonsMap LeftButtonsMapProps={LeftButtonsMapProps} />
-        <Map
+        <Map id="map_full"
           google={this.props.google}
           center={this.state.center}
           zoom={this.state.zoom}
@@ -234,6 +228,7 @@ class MapFull extends Component {
           }}
           mapTypeControl={false}
         >
+          <LeftButtonsMap LeftButtonsMapProps={LeftButtonsMapProps} />
           <BottomButtonsMapFree BottomButtonsMapProps={BottomButtonsMapProps} />
           {this.state.markers.map((marker, i) => {
             if (marker.lat !== '')

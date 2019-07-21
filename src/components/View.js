@@ -9,10 +9,9 @@ renders the polylines and markers related.
 
 import React, { Component } from 'react'
 import config from '../others/config.js'
-import BottomButtonsMap from './BottomButtonsMap'
 import FiguresList from './FiguresList'
 import { Map, GoogleApiWrapper, Marker, Polyline } from 'google-maps-react'
-import '../styles/map.css'
+
 
 // Imports to apollo-client and connection to graphql
 import { ApolloProvider } from 'react-apollo'
@@ -99,7 +98,6 @@ class MapView extends Component {
           }}
           mapTypeControl={false}
         >
-          <BottomButtonsMap  />
           {this.state.markers.map((marker, i) => {
             if (marker.lat !== '')
               return (

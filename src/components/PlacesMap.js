@@ -9,7 +9,7 @@ Is called from MapFull to load the places.
 */
 import React, { Component } from 'react'
 import { Query } from 'react-apollo'
-import { Dropdown } from 'react-bootstrap'
+import { Dropdown} from 'react-bootstrap'
 import gql from 'graphql-tag'
 
 
@@ -112,43 +112,11 @@ class PlacesMap extends Component {
             }
             }
         </Query>
-        /*if (this.state.tag_selected !== '') {
-            return (
-                <Query query={PLAC_TAG_Q} variables={{ Tag: this.state.tag_selected }} pollInterval={1000}>
-                    {({ loading, error, data }) => {
-                        if (loading) return <div>Loading</div>
-                        if (error) return <div>Error</div>
-                        if (data) {
-                            const placeList = data.getAllPlacesByTag
-                            this.receivedPlaces(placeList)
-                            return <div>Completed</div>
-                        }
-                    }
-                    }
-                </Query>
-            )
-        } else if (this.state.idCiv_selected !== '') {
-            return (
-                <Query query={PLAC_CIV_Q} variables={{ Id: this.state.idCiv_selected }} pollInterval={1000}>
-                    {({ loading, error, data }) => {
-                        if (loading) return <div>Loading</div>
-                        if (error) return <div>Error</div>
-                        if (data) {
-                            const placeList = data.getAllPlacesFromCivilization
-                            this.receivedPlaces(placeList)
-                            return <div>Completed</div>
-                        }
-                    }
-                    }
-                </Query>
-            )
-
-        } else {*/
         return (
             <section>
                 <Dropdown>
-                    <Dropdown.Toggle variant="success" id="dropdown-basic">
-                        Selecciona para ver las civilizaciones disponibles
+                    <Dropdown.Toggle variant="success" id="dropdown-basic" size="sm">
+                        Civilizaciones disponibles  
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                         <Query query={CIV_Q} pollInterval={1000}>
@@ -173,8 +141,8 @@ class PlacesMap extends Component {
                 </Dropdown>
                 {/*Start tag-dropdown*/}
                 <Dropdown>
-                    <Dropdown.Toggle variant="success" id="dropdown-basic">
-                        Selecciona para ver los tags disponibles
+                    <Dropdown.Toggle variant="success" id="dropdown-basic" size="sm">
+                        Tags disponibles
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                         <Query query={TAG_Q} pollInterval={1000}>

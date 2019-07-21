@@ -99,7 +99,7 @@ class LeftButoonsMap extends Component {
             });
             //Execution of the mutations with the left menu
             return (
-                <ButtonGroup vertical className="buttonGroupVertical">
+                <ButtonGroup vertical className="buttonGroupVerticalFull">
                     {mutations}
                     <PlacesMap placesMapProps={placesMapProps}/>
                     <CreateFigureMap createFigureMapProps={createFigureMapProps} />
@@ -108,7 +108,7 @@ class LeftButoonsMap extends Component {
         }
         else //If the condition is not satisfied, return the left menu  
             return (
-                <ButtonGroup vertical className="buttonGroupVertical">
+                <ButtonGroup vertical className="buttonGroupVerticalFull">
                     <PlacesMap placesMapProps={placesMapProps}/>
                     <CreateFigureMap createFigureMapProps={createFigureMapProps} />
                 </ButtonGroup>

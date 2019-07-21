@@ -15,7 +15,7 @@ import { gql } from "apollo-boost"
 import EdgeMutation from "./EdgeMutation"
 import CreatePlaceMap from "./CreatePlaceMap"
 import CreateFigureMap from "./CreateFigureMap"
-import '../styles/map.css'
+
 
 const EDGE_CREATE = gql`
   mutation setEdge($Id_figure: Int!, $Id_placeFrom: Int!, $Id_placeTo: Int!, $Dist: String!) {

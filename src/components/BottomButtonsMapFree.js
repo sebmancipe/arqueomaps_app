@@ -9,7 +9,7 @@ polylines based in the user input.
 
 import React, { Component } from 'react'
 import { ButtonGroup, Button, Dropdown, DropdownButton } from 'react-bootstrap'
-import '../styles/map.css'
+
 
 
 class BottomButtonsMapFree extends Component {
@@ -47,13 +47,13 @@ class BottomButtonsMapFree extends Component {
   render() {
     return (
       <ButtonGroup size="sm" aria-label="Basic example" className="buttonGroupHorizontal">
-        <Button variant="secondary" onClick={this.resetPolylines}>Reset</Button>
-        <Button variant="secondary" onClick={this.showPolylineStack}>Stack</Button>
-        <DropdownButton id="dropdown-basic-button" title="Manually">
+        <Button size="sm" variant="secondary" onClick={this.resetPolylines}>Reset</Button>
+        <Button size="sm" variant="secondary" onClick={this.showPolylineStack}>Stack</Button>
+        <DropdownButton id="dropdown-basic-button" title="Manually" size="sm">
           <Dropdown.Item onClick={(e) => this.showPolylineManually(e, false)}>{(this.state.showManually) ? 'Deactivate' : 'Activate'}</Dropdown.Item>
           <Dropdown.Item onClick={(e) => this.showPolylineManually(e, true)}>Reset</Dropdown.Item>
         </DropdownButton>
-        <DropdownButton id="dropdown-basic-button" title="Many2One">
+        <DropdownButton id="dropdown-basic-button" title="Many2One" size="sm">
           <Dropdown.Item onClick={(e) => this.showPolylineMany2One(e, false)}>{(this.state.showMany2One) ? 'Deactivate' : 'Activate'}</Dropdown.Item>
           <Dropdown.Item onClick={(e) => this.showPolylineMany2One(e, true)}>Reset</Dropdown.Item>
         </DropdownButton>

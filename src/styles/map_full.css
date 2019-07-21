@@ -1,0 +1,21 @@
+#map_full {
+    height: 100vh !important;
+    z-index: 0;
+}
+
+.buttonGroupVerticalFull{
+    /*Add left styles*/
+    bottom: 0%;
+}
+
+/*Phone rotation off*/
+@media screen and (max-height: 736px) and (orientation:portrait) {
+    /*Problem with same component loaded in Free*/
+	.buttonGroupHorizontal {
+        z-index: 100;
+        bottom: 0;
+        margin-left: 0;
+        padding-left: 0;
+        padding-right: 100%;
+    }
+}

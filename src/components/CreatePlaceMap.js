@@ -7,10 +7,9 @@ This component contains the form and methods to add a Marker/Place (it also send
 Sends the information to its parent LeftButtonMap to render de marker.
 */
 import React from 'react'
-import { OverlayTrigger, Button, Form, Popover, Alert } from 'react-bootstrap'
+import { OverlayTrigger, Button, Form, Popover, Alert, Col, Row } from 'react-bootstrap'
 import { Mutation } from "react-apollo"
 import { gql } from "apollo-boost"
-import '../styles/map.css'
 
 const PLAC_CREATE = gql`
   mutation newPlace($Name: String!, $Latitude: String!, $Longitude: String!, $Tag: String) {
@@ -25,7 +24,7 @@ class CreatePlaceMap extends React.Component {
         super(props);
         this.state = {
             place: {
-                name_place: '', lat_place: '', lng_place: '',tag_place:''
+                name_place: '', lat_place: '', lng_place: '', tag_place: ''
             }
         }
     }
@@ -52,17 +51,29 @@ class CreatePlaceMap extends React.Component {
     render() {
         return (
             <OverlayTrigger trigger="click" placement="right" overlay={
-                <Popover id="popover-basic" title="Agrega una nueva ubicación" className="markersForm">
+                <Popover id="popover-basic" title="Agrega una nueva ubicación" className="markersForm" >
                     <Form onChange={this.changePlace}>
                         <Form.Group controlId="form" >
-                            <Form.Label>Latitud</Form.Label>
-                            <Form.Control size="sm" type="number" step="0.0000000001" placeholder="Latitud" name="lat_place" className="latitude" />
-                            <Form.Label size="sm">Longitud</Form.Label>
-                            <Form.Control size="sm" type="number" step="0.0000000001" placeholder="Longitud" name="lng_place" className="longitude" />
-                            <Form.Label size="sm">Nombre</Form.Label>
-                            <Form.Control size="sm" type="text" placeholder="Nombre" name="name_place" className="textname" />
-                            <Form.Label size="sm">Tag</Form.Label>
-                            <Form.Control size="sm" type="text" placeholder="Nombre" name="tag_place" className="textname" />
+                            <Row>
+                                <Col>
+                                    <Form.Label size="sm">Latitud</Form.Label>
+                                    <Form.Control size="sm" type="number" step="0.0000000001" placeholder="Latitud" name="lat_place" className="latitude" />
+                                </Col>
+                                <Col>
+                                    <Form.Label size="sm">Longitud</Form.Label>
+                                    <Form.Control size="sm" type="number" step="0.0000000001" placeholder="Longitud" name="lng_place" className="longitude" />
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Form.Label size="sm">Nombre</Form.Label>
+                                    <Form.Control size="sm" type="text" placeholder="Nombre" name="name_place" className="textname" />
+                                </Col>
+                                <Col>
+                                    <Form.Label size="sm">Tag</Form.Label>
+                                    <Form.Control size="sm" type="text" placeholder="Tag" name="tag_place" className="tagname" />
+                                </Col>
+                            </Row>
                         </Form.Group>
                         <Mutation mutation={PLAC_CREATE}
                             variables={{
@@ -71,7 +82,7 @@ class CreatePlaceMap extends React.Component {
                                 Longitude: this.state.place.lng_place,
                                 Tag: this.state.place.tag_place
                             }}
-                            update={(cache,{ data: { newPlace } }) => {
+                            update={(cache, { data: { newPlace } }) => {
                                 this.receivedPlace(newPlace.Id)
                             }}>
                             {(submitPlace, { error }) => (
@@ -83,7 +94,7 @@ class CreatePlaceMap extends React.Component {
                         </Mutation>
                     </Form>
                 </Popover>
-            }><Button variant="success">Add</Button>
+            }><Button size="sm" variant="success">Add</Button>
             </OverlayTrigger>
         );
     };

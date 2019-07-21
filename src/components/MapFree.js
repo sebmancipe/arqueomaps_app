@@ -12,7 +12,7 @@ import config from '../others/config.js'
 import LeftButtonsMapFree from './LeftButtonsMapFree'
 import BottomButtonsMapFree from './BottomButtonsMapFree'
 import { Map, GoogleApiWrapper, Marker, Polyline } from 'google-maps-react'
-import '../styles/map.css'
+import '../styles/map_free.css'
 
 // Imports to apollo-client and connection to graphql
 import { ApolloProvider } from 'react-apollo'
@@ -239,8 +239,7 @@ class MapFree extends Component {
 
     return (
       <ApolloProvider client={client}>
-        <LeftButtonsMapFree LeftButtonsMapProps={LeftButtonsMapProps} />
-        <Map
+        <Map id="map_free"
           google={this.props.google}
           center={this.state.center}
           zoom={this.state.zoom}
@@ -250,6 +249,7 @@ class MapFree extends Component {
           }}
           mapTypeControl={false}
         >
+          <LeftButtonsMapFree LeftButtonsMapProps={LeftButtonsMapProps} />
           <BottomButtonsMapFree BottomButtonsMapProps={BottomButtonsMapProps} />
           {this.state.markers.map((marker, i) => {
             if (marker.lat !== '')

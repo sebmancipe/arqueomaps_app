@@ -1,0 +1,45 @@
+/*
+
+*/
+
+#map_free {
+    height: 100vh !important;
+    z-index: 0;
+}
+
+.buttonGroupVertical {
+    float: inline-end;
+}
+
+.buttonGroupHorizontal {
+    z-index: 100;
+    bottom: 0;
+    margin-left: 0.68em;
+    position: fixed !important;
+}
+
+/*Phone rotation on*/
+@media screen and (max-width: 736px) and (orientation:landscape) {
+
+    .buttonGroupVertical {
+        margin-top: 0.2em;
+        z-index: 100;
+    }
+
+    .buttonGroupHorizontal {
+        z-index: 100;
+        bottom: 0;
+        margin-left: 0.68em;
+    }
+
+}
+
+/*Phone rotation off*/
+@media screen and (max-height: 736px) and (orientation:portrait) {
+	.buttonGroupHorizontal {
+        z-index: 100;
+        bottom: 0;
+        margin-left: 0;
+        padding-left: 0;
+    }
+}

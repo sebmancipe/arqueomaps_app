@@ -7,10 +7,9 @@ This component contains the form and methods to add a Figure (it also sends it t
 Sends the information to its parent, LeftButtonMap.
 */
 import React from 'react'
-import { OverlayTrigger, Button, Form, Popover, Alert } from 'react-bootstrap'
+import { OverlayTrigger, Button, Form, Popover, Alert, Row, Col } from 'react-bootstrap'
 import { Mutation } from "react-apollo"
 import { gql } from "apollo-boost"
-import '../styles/map.css'
 
 const FIG_CREATE = gql`
   mutation newFigure($Name: String!, $Description: String!, $Author: String!, $CreationDate:String!){
@@ -60,12 +59,18 @@ class CreateFigureMap extends React.Component {
                 <Popover id="popover-basic" title="Describe la figura a guardar" className="figureForm">
                     <Form onChange={this.changeFigure}>
                         <Form.Group controlId="form" >
-                            <Form.Label>Nombre</Form.Label>
-                            <Form.Control size="sm" type="text" placeholder="Nombre" name="name_figure" className="textname" />
-                            <Form.Label size="sm">Descripción</Form.Label>
-                            <Form.Control size="sm" type="text" placeholder="Descripción" name="description_figure" className="textdescription" />
-                            <Form.Label size="sm">Autor</Form.Label>
-                            <Form.Control size="sm" type="text" placeholder="Autor" name="author_figure" className="textauthor" />
+                            <Row>
+                                <Col>
+                                    <Form.Label>Nombre</Form.Label>
+                                    <Form.Control size="sm" type="text" placeholder="Nombre" name="name_figure" className="textname" />
+                                    <Form.Label size="sm">Descripción</Form.Label>
+                                    <Form.Control size="sm" type="text" placeholder="Descripción" name="description_figure" className="textdescription" />
+                                </Col>
+                                <Col>
+                                    <Form.Label size="sm">Autor</Form.Label>
+                                    <Form.Control size="sm" type="text" placeholder="Autor" name="author_figure" className="textauthor" />
+                                </Col>
+                            </Row>
                         </Form.Group>
                     </Form>
 
@@ -86,7 +91,7 @@ class CreateFigureMap extends React.Component {
                                     Save
                                 </Button>
                                 {error && <Alert variant='danger'>
-                                        Ha ocurrido un error...
+                                    Ha ocurrido un error...
                                 </Alert>}
                             </div>
                         )}

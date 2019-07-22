@@ -3,10 +3,19 @@
     z-index: 0;
 }
 
+
 .buttonGroupVerticalFull{
-    /*Add left styles*/
-    bottom: 0%;
+    margin: 0;
+    padding: 0;
 }
+
+
+#dropdown_tag{
+    display: grid;
+}
+
+
+
 
 /*Phone rotation off*/
 @media screen and (max-height: 736px) and (orientation:portrait) {

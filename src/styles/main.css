@@ -2,15 +2,15 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,700");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
 
-#render_component{
+#render_component {
 	height: 100vh;
 }
 
-.box-gallery{
+.box-gallery {
 	height: 100vh;
 }
 
-#main_container{
+#main_container {
 	font-family: "Roboto", sans-serif;
 	font-size: 16pt;
 	font-weight: 400;
@@ -22,11 +22,11 @@
 	z-index: 100;
 }
 
-#orientation_message{
+#orientation_message {
 	display: none;
 }
 
-.box-gallery{
+.box-gallery {
 	z-index: -100;
 }
 
@@ -37,6 +37,7 @@
 	}
 
 }
+
 /*
 @media screen and (orientation:portrait) {
 	#main_container {
@@ -94,65 +95,65 @@
 /* Header */
 
 #header h1 {
-    font-size: 3.25em;
+	font-size: 3.25em;
 	margin: 0 0 0.55em 0;
-	color: lavender;
+	color: white;
 }
 
 #header p {
-    font-size: 1.35em;
+	font-size: 1.35em;
 	line-height: 1.65em;
-	color: lavender;
+	color: white;
 }
 
 #header a {
-    color: inherit;
+	color: inherit;
 }
 
-#selection_container{
+#selection_container {
 	width: 100%;
 	margin-bottom: 10em;
 	padding-left: 0px;
 }
 
-#admin_button{
+#admin_button {
 	width: auto;
 	float: left;
 	margin-right: 15px;
 }
 
-#map_button{
+#map_button {
 	width: auto;
 	float: left;
 }
 
 #footer {
-    -moz-transition: opacity 0.5s ease-in-out;
-    -webkit-transition: opacity 0.5s ease-in-out;
-    -ms-transition: opacity 0.5s ease-in-out;
-    transition: opacity 0.5s ease-in-out;
-    color:cornflowerblue;
+	-moz-transition: opacity 0.5s ease-in-out;
+	-webkit-transition: opacity 0.5s ease-in-out;
+	-ms-transition: opacity 0.5s ease-in-out;
+	transition: opacity 0.5s ease-in-out;
+	color: cornflowerblue;
 	opacity: 0.5;
 }
 
 
-    #footer .icons {
-		margin: 0 0 0 0;
-		font-family: "Roboto", sans-serif;
-		font-size: 12pt;
-    }
+#footer .icons {
+	margin: 0 0 0 0;
+	font-family: "Roboto", sans-serif;
+	font-size: 12pt;
+}
 
 
-    #footer:hover {
-        opacity: 1;
-	}
+#footer:hover {
+	opacity: 1;
+}
 
 
-    #footer > :last-child {
-        margin-left: 15px;
-    }
+#footer> :last-child {
+	margin-left: 15px;
+}
 
-    /*@media screen and (max-width: 1680px) {
+/*@media screen and (max-width: 1680px) {
 
         #footer {
             bottom: 3.5em;
@@ -161,14 +162,15 @@
 
     }*/
 
-    @media screen and (max-width: 736px) {
+@media screen and (max-width: 736px) {
 
-        .icons {
-            border: 12em;
-        }
-
+	.icons {
+		border: 12em;
 	}
-	/*
+
+}
+
+/*
     @media screen and (max-width: 360px) {
 
         #footer {
@@ -188,29 +190,29 @@
         }
 
 	}*/
-	
-	ul.icons {
-		cursor: default;
-		list-style: none;
-		padding-left: 0;
-	}
-	
-		ul.icons li {
-			display: inline-block;
-			padding: 0 1em 0 0;
-		}
-	
-			ul.icons li:last-child {
-				padding-right: 0;
-			}
-	
-			ul.icons li .icon:before {
-				font-size: 1.25em;
-			}
-	
-			ul.icons li a {
-				color: inherit;
-			}
+
+ul.icons {
+	cursor: default;
+	list-style: none;
+	padding-left: 0;
+}
+
+ul.icons li {
+	display: inline-block;
+	padding: 0 1em 0 0;
+}
+
+ul.icons li:last-child {
+	padding-right: 0;
+}
+
+ul.icons li .icon:before {
+	font-size: 1.25em;
+}
+
+ul.icons li a {
+	color: inherit;
+}
 
 
 /*Phone rotation off*/
@@ -227,14 +229,20 @@
 		margin-bottom: 0em;
 	}
 
-	#admin_button{
+	#admin_button {
 		margin-bottom: 1em;
 	}
-	#orientation_message{
+
+	#orientation_message {
 		display: block;
 		color: azure;
 		color-adjust: inherit;
 		font-size: 8pt;
+	}
+
+
+	#dropdown_Civlist {
+		font-size: 0.5em;
 	}
 
 }
@@ -253,8 +261,25 @@
 		margin-bottom: 0em;
 	}
 
-	#selection_container{
+	#selection_container {
 		margin-bottom: 8em;
 	}
 
+}
+
+#background_div {
+	background-image: url('../images/back02.jpg');
+	background-position: center;
+	background-repeat: repeat;
+	background-size: cover;
+	position: fixed;
+}
+
+#form_add {
+	color: white;
+}
+
+
+h4 {
+	color: white;
 }

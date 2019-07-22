@@ -61,13 +61,13 @@ class CreateFigureMap extends React.Component {
                         <Form.Group controlId="form" >
                             <Row>
                                 <Col>
-                                    <Form.Label>Nombre</Form.Label>
+                                    <Form.Text size="sm">Nombre</Form.Text>
                                     <Form.Control size="sm" type="text" placeholder="Nombre" name="name_figure" className="textname" />
-                                    <Form.Label size="sm">Descripción</Form.Label>
+                                    <Form.Text size="sm">Descripción</Form.Text>
                                     <Form.Control size="sm" type="text" placeholder="Descripción" name="description_figure" className="textdescription" />
                                 </Col>
                                 <Col>
-                                    <Form.Label size="sm">Autor</Form.Label>
+                                    <Form.Text size="sm">Autor</Form.Text>
                                     <Form.Control size="sm" type="text" placeholder="Autor" name="author_figure" className="textauthor" />
                                 </Col>
                             </Row>

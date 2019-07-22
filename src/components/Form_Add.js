@@ -4,11 +4,11 @@ Date: May 24 - 2019
 Last update: July 5 - 2019
 Description: 
 This component shows the creates civilization and places section.
-Contains the main configuration of Apollo Client also
+Contains the main configuration of Apollo Client too
 */
 
 import React, { Component } from 'react'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button,Container } from 'react-bootstrap'
 import PlaceInputs from './PlaceInputs'
 import config from '../others/config'
 import CivilizationAdd from './CivilizationAdd'
@@ -30,10 +30,6 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 })
 
-
-const text_style = {
-  color: '#000000'
-}
 
 const admin_buttons_style = {
   margin: '5px'
@@ -107,13 +103,14 @@ class Form_Add extends Component {
 
     return (
       <ApolloProvider client={client}>
-        <div className="content">
+      <div className="box-gallery" id="background_div"></div>
+        <Container id="main_container">
           <header id="header" >
-            <h1 style={text_style}>Agrega civilizaciones</h1>
+            <h1>Agrega civilizaciones</h1>
             <p>Ingresa los campos y agrega lugares a la civilización que estás por crear</p>
           </header>
-          <Form onChange={this.handleChange}>
-            <Form.Group>
+          <Form onChange={this.handleChange} id="form_add">
+            <Form.Group id="form_add">
               <Form.Label htmlFor="civilization_name">Nombre de la civilización</Form.Label>
               <Form.Control type="text" name="civilization_name" placeholder="Nombre" id="civilization_name" />
               <Form.Text className="text-muted">
@@ -126,7 +123,7 @@ class Form_Add extends Component {
               </Form.Text>
             </Form.Group>
 
-            <h4 style={text_style}>Lugares</h4>
+            <h4>Lugares</h4>
             <Button style={admin_buttons_style} variant="secondary"  onClick={this.addLocation}>
               Agregar más lugares
             </Button>
@@ -135,9 +132,8 @@ class Form_Add extends Component {
             </Button>
             <PlaceInputs places={placesToRender} />
             <CivilizationAdd civilizationprops={civilizationprops} />
-            
           </Form>
-        </div>
+          </Container>
       </ApolloProvider>
     );
   }

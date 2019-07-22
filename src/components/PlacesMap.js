@@ -116,7 +116,7 @@ class PlacesMap extends Component {
             <section>
                 <Dropdown>
                     <Dropdown.Toggle variant="success" id="dropdown-basic" size="sm">
-                        Civilizaciones disponibles  
+                        Civz.  
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                         <Query query={CIV_Q} pollInterval={1000}>
@@ -140,9 +140,9 @@ class PlacesMap extends Component {
                     </Dropdown.Menu>
                 </Dropdown>
                 {/*Start tag-dropdown*/}
-                <Dropdown>
+                <Dropdown id="dropdown_tag">
                     <Dropdown.Toggle variant="success" id="dropdown-basic" size="sm">
-                        Tags disponibles
+                        Tags
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                         <Query query={TAG_Q} pollInterval={1000}>

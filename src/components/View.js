@@ -11,6 +11,7 @@ import React, { Component } from 'react'
 import config from '../others/config.js'
 import FiguresList from './FiguresList'
 import { Map, GoogleApiWrapper, Marker, Polyline } from 'google-maps-react'
+import '../styles/map_free.css'
 
 
 // Imports to apollo-client and connection to graphql
@@ -58,22 +59,30 @@ class MapView extends Component {
 
 /**
  * updateEdges reload the polylines and markers states of this component to re-render the figure
- * selected. Is called by child FiguresList.
+ * selected. Is called by child FiguresList. Could be optimized by the type of figure (Many2One or Manually)
  * @param {Param that contains the information of all edges with Id, PlaceFrom,
  * PlaceTo and Dist} edges 
  */
   updateEdges(edges){
+    console.log(edges)
     let markers,markers2PolyView,markerFrom,markerTo
     edges.forEach(function(edge){
     markerFrom = {id:edge.PlaceFrom.Id,lat:edge.PlaceFrom.Latitude,lng:edge.PlaceFrom.Longitude,text_mark: edge.PlaceFrom.Name}
     markerTo = {id:edge.PlaceTo.Id,lat:edge.PlaceTo.Latitude,lng:edge.PlaceTo.Longitude,text_mark: edge.PlaceTo.Name}
     if (markers===undefined) {
       markers = [markerFrom]
+      markers.push(markerTo)
       markers2PolyView = [{ id: markerFrom.id, lat: markerFrom.lat, lng: markerFrom.lng }]
+      markers2PolyView.push({ id: markerTo.id, lat: markerTo.lat, lng: markerTo.lng })
+    }else{
+      if(markers.filter(marker => (marker.id===markerTo.id)).length===0)
+      markers.push(markerTo) //Avoid duplicates - Not used in Many2One
+      if(markers.filter(marker => (marker.id===markerFrom.id)).length===0)
+      markers.push(markerFrom) //Avoid duplicates - Not used in Many2One
+      //markers.push(markerFrom) Obligatory in Many2One
+      markers2PolyView.push({ id: markerFrom.id, lat: markerFrom.lat, lng: markerFrom.lng })
+      markers2PolyView.push({ id: markerTo.id, lat: markerTo.lat, lng: markerTo.lng })
     }
-    if(markers.filter(marker => (marker.id===markerTo.id)).length===0)
-      markers.push(markerTo) //Avoid duplicates
-    markers2PolyView.push({ id: markerTo.id, lat: markerTo.lat, lng: markerTo.lng })
     })
     this.setState({ markers})
     this.setState({ markers2PolyView})
@@ -87,8 +96,7 @@ class MapView extends Component {
 
     return (
       <ApolloProvider client={client}> 
-        <FiguresList FiguresListProps={FiguresListProps}/>
-        <Map
+        <Map id="map_free"
           google={this.props.google}
           center={this.state.center}
           zoom={this.state.zoom}
@@ -98,6 +106,7 @@ class MapView extends Component {
           }}
           mapTypeControl={false}
         >
+        <FiguresList FiguresListProps={FiguresListProps}/>
           {this.state.markers.map((marker, i) => {
             if (marker.lat !== '')
               return (

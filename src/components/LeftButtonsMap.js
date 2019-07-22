@@ -9,7 +9,7 @@ Uses children components as CreateFigureMap and CreatePlaceMap.
 */
 
 import React, { Component } from 'react'
-import { ButtonGroup } from 'react-bootstrap'
+import { ButtonGroup} from 'react-bootstrap'
 import CreateFigureMap from "./CreateFigureMap"
 import PlacesMap from "./PlacesMap"
 import { Mutation } from 'react-apollo'
@@ -104,6 +104,7 @@ class LeftButoonsMap extends Component {
                     <PlacesMap placesMapProps={placesMapProps}/>
                     <CreateFigureMap createFigureMapProps={createFigureMapProps} />
                 </ButtonGroup>
+                
             )
         }
         else //If the condition is not satisfied, return the left menu  

@@ -70,7 +70,7 @@ class FiguresList extends Component {
         return (
             <Dropdown>
                 <Dropdown.Toggle variant="success" id="dropdown-basic">
-                    Selecciona para ver las figuras disponibles
+                    Ver las figuras disponibles
                     </Dropdown.Toggle>
                 <Dropdown.Menu>
                     <Query query={FIG_QUERY} pollInterval={1000}>

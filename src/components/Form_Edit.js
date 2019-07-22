@@ -9,7 +9,7 @@ Contains the main configuration of Apollo Client also
 */
 
 import React, { Component } from 'react'
-import {Dropdown} from 'react-bootstrap'
+import {Dropdown,Container} from 'react-bootstrap'
 import config from '../others/config'
 import 'bootstrap/dist/css/bootstrap.css'
 import CivilizationList from './CivilizationList'
@@ -33,14 +33,6 @@ const client = new ApolloClient({
 
 
 
-const text_style ={
-  color: '#000000'
-}
-
-const margin_style ={
-  'marginBottom': '15px'
-}
-
 
 class Form_Edit extends Component{
   constructor (props){
@@ -60,21 +52,22 @@ class Form_Edit extends Component{
   render(){
     return(
         <ApolloProvider client={client}>
-          <div className="content">
+        <div className="box-gallery" id="background_div"></div>
+          <Container id="main_container">
             <header id="header" >
-              <h1 style={text_style}>Edita civilizaciones</h1>
+              <h1>Edita civilizaciones</h1>
               <p>Selecciona la civilización y edita sus lugares</p>
             </header>
       
-            <Dropdown style={margin_style}>
+            <Dropdown id="dropdown_Civlist">
               <Dropdown.Toggle variant="success" id="dropdown-basic">
-                Selecciona para ver las civilizaciones disponibles
+                Ver las civilizaciones disponibles
               </Dropdown.Toggle>
               <CivilizationList onSelectedCiv={this.onSelectedCiv.bind(this)}/>
               <PlacesList civilizationId={this.state.id_selected}/>
             </Dropdown>
 
-        </div>
+        </Container>
       </ApolloProvider>
     );
     }

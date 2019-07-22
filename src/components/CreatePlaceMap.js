@@ -56,25 +56,26 @@ class CreatePlaceMap extends React.Component {
                         <Form.Group controlId="form" >
                             <Row>
                                 <Col>
-                                    <Form.Label size="sm">Latitud</Form.Label>
+                                <Form.Text size="sm">Latitud</Form.Text>
                                     <Form.Control size="sm" type="number" step="0.0000000001" placeholder="Latitud" name="lat_place" className="latitude" />
                                 </Col>
                                 <Col>
-                                    <Form.Label size="sm">Longitud</Form.Label>
+                                <Form.Text size="sm">Longitud</Form.Text>
                                     <Form.Control size="sm" type="number" step="0.0000000001" placeholder="Longitud" name="lng_place" className="longitude" />
                                 </Col>
                             </Row>
                             <Row>
                                 <Col>
-                                    <Form.Label size="sm">Nombre</Form.Label>
+                                <Form.Text size="sm">Nombre</Form.Text>
                                     <Form.Control size="sm" type="text" placeholder="Nombre" name="name_place" className="textname" />
                                 </Col>
                                 <Col>
-                                    <Form.Label size="sm">Tag</Form.Label>
+                                    <Form.Text size="sm">Tag</Form.Text>
                                     <Form.Control size="sm" type="text" placeholder="Tag" name="tag_place" className="tagname" />
                                 </Col>
                             </Row>
                         </Form.Group>
+                        {/*TODO: May use PlacesAdd component*/}
                         <Mutation mutation={PLAC_CREATE}
                             variables={{
                                 Name: this.state.place.name_place,

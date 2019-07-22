@@ -7,24 +7,23 @@
   IMPORTANT: All the related components from this has the bug of the cut-off page  
 */
   import React, { Component } from 'react'
-  import { Button, ButtonToolbar} from 'react-bootstrap'
+  import { Button, ButtonToolbar, Container} from 'react-bootstrap'
   import {NavLink} from 'react-router-dom'
   import '../styles/main.css'
 
   const admin_buttons_style ={
     margin: '5px'
   }
-  const text_style ={
-    color: '#000000'
-  }
 
   class AdministrationView extends Component{
     
     render(){
       return(
-        <div className="content">
+        <div>
+        <div className="box-gallery" id="background_div"></div>
+        <Container id="main_container">
           <header id="header" >
-            <h1 style={text_style}>Administra las civilizaciones</h1>
+            <h1>Administra las civilizaciones</h1>
             <p>Selecciona alguna de las siguientes opciones</p>
           </header>
 
@@ -33,6 +32,7 @@
             <NavLink to="/edit"><Button variant="primary" style={admin_buttons_style}>Editar</Button></NavLink>
             <NavLink to="/view"><Button variant="primary" style={admin_buttons_style}>Ver</Button></NavLink>
         </ButtonToolbar>
+        </Container>
         </div>
       );
     }

@@ -26,8 +26,6 @@ class PlaceInputs extends Component {
                 <Form.Text htmlFor={namePlace} className="text-muted">
                   Nombre
                          </Form.Text>
-                <Form.Text htmlFor={namePlace} className="text">
-                </Form.Text>
                 <Form.Control placeholder="Nombre" type="text" name={namePlace} data-id={idx} id={namePlace} className="place_name" />
               </Col>
               <Col>

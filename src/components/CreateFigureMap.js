@@ -7,7 +7,7 @@ This component contains the form and methods to add a Figure (it also sends it t
 Sends the information to its parent, LeftButtonMap.
 */
 import React from 'react'
-import { OverlayTrigger, Button, Form, Popover, Alert, Row, Col } from 'react-bootstrap'
+import { OverlayTrigger, Button, Form, Popover, Alert, Row, Col} from 'react-bootstrap'
 import { Mutation } from "react-apollo"
 import { gql } from "apollo-boost"
 

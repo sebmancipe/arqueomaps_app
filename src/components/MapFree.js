@@ -1,7 +1,7 @@
 /* 
 Author: Sebastian Mancipe
 Date: 
-Last update: July 19 - 2019
+Last update: August 10 - 2019
 Description: 
 This component contains the fast map, markers and polylines loaded on it. 
 Executes methods to get distance, join markers manually, by stack (arrive order) or to a specific point
@@ -30,6 +30,8 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 })
 
+const R = 6371e3; // Earth’s radius in meter
+
 /*const mapStyles = {
   width: '100vh',
   height: '100%'
@@ -41,11 +43,14 @@ class MapFree extends Component {
     super(props);
     //Load basic markers for testing purpose
     this.state = {
-      markers: [{ id: '', lat: '', lng: '', text_mark: '',tag: '' }],
+      //markers: [{ id: '', lat: '', lng: '', text_mark: '',tag: '' }],
       /*markers: [{ id:'1',lat: '5.6494393', lng: '-73.5163933', text_mark: "Desierto El Infiernito" },
                 { id:'2',lat: '4.977777', lng: '-73.775097', text_mark: "Laguna de Guatavita" },
                 { id:'3',lat: '5.709184', lng: '-72.923647', text_mark: "Templo del Sol" },
                 { id:'4',lat: '4.598083', lng: '-74.076043', text_mark: "Plaza Simón Bolivar" }],*/
+      markers: [{ id: 1, lat: 25.774, lng: -80.19, text_mark: 'Place 1', tag: 'Tag 1' },
+      { id: 2, lat: 18.466, lng: -66.118, text_mark: 'Place 2', tag: 'Tag 1' },
+      { id: 3, lat: 32.321, lng: -64.757, text_mark: 'Place 3', tag: 'Tag 1' }],
       markers2PolyStack: [{ id: '', lat: '', lng: '', dist: '' }],
       markers2PolyManually: [{ id: '', lat: '', lng: '', dist: '' }],
       markers2PolyMany2One: [{ id: '', lat: '', lng: '', dist: '' }],
@@ -58,9 +63,27 @@ class MapFree extends Component {
       drawPolylinesStack: false,
       drawPolylinesManually: false,
       drawPolylinesMany2One: false,
+      getAngle: false,
+      markers2Angle: [{ id: '', lat: '', lng: '' }],
       id_figure: ''
     }
     this.onMarkerClick = this.onMarkerClick.bind(this);
+  }
+
+  setAngles(isReset) {
+    if (isReset) {
+      this.setState({ getAngle: false });
+      let markers2Angle = [{ id: '', lat: '', lng: '' }];
+      this.setState({ markers2Angle })
+    } else {
+      this.setState({ getAngle: (this.state.getAngle) ? false : true });
+    }
+
+    if (this.state.getAngle) {
+      this.setState({ drawPolylinesStack: false })
+      this.setState({ drawPolylinesMany2One: false })
+      this.setState({ drawPolylinesManually: false })
+    }
   }
 
   generatePolylineStack() {
@@ -75,31 +98,33 @@ class MapFree extends Component {
   //Method that reset, show or no the polyline of manually input
   generatePolylineManually(isReset) {
     if (isReset) {
-      this.setState({ drawPolylinesManually:false})
+      this.setState({ drawPolylinesManually: false })
       let markers2PolyManually = [{ id: '', lat: '', lng: '', dist: '' }]
       this.setState({ markers2PolyManually })
-    }else
+    } else
       this.setState({ drawPolylinesManually: (this.state.drawPolylinesManually) ? false : true })
-    
+
     //Set the other options in false
     if (this.state.drawPolylinesManually) {
       this.setState({ drawPolylinesStack: false })
       this.setState({ drawPolylinesMany2One: false })
+      this.setState({ getAngle: false })
     }
   }
 
   //Method that reset, show or no the polyline of many to one input
   generatePolylineMany2One(isReset) {
-    if (isReset){
-      this.setState({ drawPolylinesMany2One:false})
+    if (isReset) {
+      this.setState({ drawPolylinesMany2One: false })
       let markers2PolyMany2One = [{ id: '', lat: '', lng: '', dist: '' }]
       this.setState({ markers2PolyMany2One })
-    }else
-      this.setState({drawPolylinesMany2One: (this.state.drawPolylinesMany2One) ? false:true})
+    } else
+      this.setState({ drawPolylinesMany2One: (this.state.drawPolylinesMany2One) ? false : true })
     //Set the other options in false
     if (this.state.drawPolylinesMany2One) {
       this.setState({ drawPolylinesStack: false })
       this.setState({ drawPolylinesManually: false })
+      this.setState({ getAngle: false })
     }
   }
 
@@ -110,9 +135,12 @@ class MapFree extends Component {
     this.setState({ markers2PolyMany2One })
     let markers2PolyManually = [{ id: '', lat: '', lng: '', dist: '' }]
     this.setState({ markers2PolyManually })
+    let markers2Angle = [{ id: '', lat: '', lng: '' }]
+    this.setState({ markers2Angle })
     this.setState({ drawPolylinesManually: false })
     this.setState({ drawPolylinesMany2One: false })
     this.setState({ drawPolylinesStack: false })
+    this.setState({ getAngle: false })
     this.setState({ id_figure: '' })
   }
 
@@ -160,11 +188,13 @@ class MapFree extends Component {
       this.markersJoinManually(placeSelected)
     } else if (this.state.drawPolylinesMany2One)
       this.markersJoinMany2One(placeSelected)
+    else if (this.state.getAngle)
+      this.getAngleBetweenMarkers(placeSelected)
   }
 
   //Adds a marker in the map and update both, marker and markers2PolyStack.
   //Also moves the view to the marker created in the map
-  addMarker(id, latitude, longitude, text,tag) {
+  addMarker(id, latitude, longitude, text, tag) {
     var p2 = {
       id: id,
       lat: latitude,
@@ -177,7 +207,7 @@ class MapFree extends Component {
     if (this.state.markers[0].lat === '') {
       markers = [this.state.markers]
       markers2PolyStack = [this.state.markers2PolyStack]
-      markers = [{ id: p2.id, lat: p2.lat, lng: p2.lng, text_mark: p2.text, tag:p2.tag }]
+      markers = [{ id: p2.id, lat: p2.lat, lng: p2.lng, text_mark: p2.text, tag: p2.tag }]
       markers2PolyStack = [{ id: Number(p2.id), lat: Number(p2.lat), lng: Number(p2.lng) }]
     }
     else {
@@ -185,7 +215,7 @@ class MapFree extends Component {
       markers = [...this.state.markers]
       markers2PolyStack = [...this.state.markers2PolyStack]
       distance = this.getDistance(markers[markers.length - 1], p2)
-      markers.push({ id: p2.id, lat: p2.lat, lng: p2.lng, text_mark: p2.text,tag:p2.tag })
+      markers.push({ id: p2.id, lat: p2.lat, lng: p2.lng, text_mark: p2.text, tag: p2.tag })
       markers2PolyStack.push({ id: Number(p2.id), lat: Number(p2.lat), lng: Number(p2.lng), dist: Number(distance) })
     }
     this.setState({ markers })
@@ -207,7 +237,6 @@ class MapFree extends Component {
 
   //Utilities: Return the distance between points p1 and p2 in meters, based geodesic
   getDistance(p1, p2) {
-    var R = 6378137; // Earth’s radius in meter
     var dLat = this.toRad(p2.lat - p1.lat);
     var dLong = this.toRad(p2.lng - p1.lng);
     var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -219,11 +248,90 @@ class MapFree extends Component {
   }
 
 
+  //Fulls the array with markers to get the angle between them
+  getAngleBetweenMarkers(placeSelected) {
+    var markers2Angle
+    if (this.state.markers2Angle[0].lat === '') {
+      markers2Angle = [{ id: placeSelected.id, lat: placeSelected.lat, lng: placeSelected.lng }]
+      this.setState({ markers2Angle })
+    } else if (this.state.markers2Angle.length <= 2) {
+      markers2Angle = [...this.state.markers2Angle]
+      markers2Angle.push({ id: placeSelected.id, lat: placeSelected.lat, lng: placeSelected.lng })
+      this.setState({ markers2Angle })
+      if (markers2Angle.length === 3) this.getAngle()
+    }
+  }
+
+  //Angles and proyection = https://www.movable-type.co.uk/scripts/latlong.html, 
+  //https://math.stackexchange.com/questions/330843/angle-between-two-coordinateslatitude-longitude-from-a-position-on-earth?answertab=active#tab-top
+  getAngle() {
+    var markers2Angle = [...this.state.markers2Angle]
+    console.log("Total polyline", markers2Angle)
+    console.log("Origin - Place 1", markers2Angle[0])
+    console.log("Place 2", markers2Angle[1])
+    console.log("Place 3", markers2Angle[2])
+
+    var lato = markers2Angle[0].lat, lngo = markers2Angle[0].lng;
+    var lat1 = markers2Angle[1].lat, lng1 = markers2Angle[1].lng;
+    var lat2 = markers2Angle[2].lat, lng2 = markers2Angle[2].lng;
+
+    var x1 = R * Math.cos(lat1) * Math.cos(lng1);
+    var y1 = R * Math.cos(lat1) * Math.sin(lng1);
+    var z1 = R * Math.sin(lat1);
+    console.log("Coordinates vector 1", x1, y1, z1)
+
+    var x2 = R * Math.cos(lat2) * Math.cos(lng2);
+    var y2 = R * Math.cos(lat2) * Math.sin(lng2);
+    var z2 = R * Math.sin(lat2);
+    console.log("Coordinates vector 2", x2, y2, z2)
+
+    var xo = R * Math.cos(lato) * Math.cos(lngo);
+    var yo = R * Math.cos(lato) * Math.sin(lngo);
+    var zo = R * Math.sin(lato);
+    console.log("Coordinates origin", xo, yo, zo)
+
+    var vector1 = {
+      x: (x1 - xo),
+      y: (y1 - yo),
+      z: (z1 - zo)
+    }
+    console.log("Vector 1", vector1)
+    var vector2 = {
+      x: (x2 - xo),
+      y: (y2 - yo),
+      z: (z2 - zo)
+    }
+    console.log("Vector 2", vector2)
+
+    var dot_product = vector1.x * vector2.x + vector1.y * vector2.y + vector1.z * vector2.z;
+    console.log("Dot product", dot_product)
+    //var magnitudes_product = this.getDistance(markers2Angle[1],markers2Angle[0])*this.getDistance(markers2Angle[2],markers2Angle[0])
+    var magnitude_1 = (Math.sqrt(Math.pow(vector1.x, 2) + Math.pow(vector1.y, 2) + Math.pow(vector1.z, 2)));
+    var magnitude_2 = (Math.sqrt(Math.pow(vector2.x, 2) + Math.pow(vector1.y, 2) + Math.pow(vector1.z, 2)));
+    console.log("Magnitude 1", magnitude_1, "Magnitude 2", magnitude_2)
+    var magnitudes_product_2 = magnitude_1 * magnitude_2
+    //console.log("Magnitudes product with geodesic ",magnitudes_product,"Magnitudes product whitout geodesic",magnitudes_product_2)
+    var angle_1 = Math.acos(dot_product / magnitudes_product_2);
+    //var angle_2 = Math.acos(dot_product/magnitudes_product);
+    console.log("Angle without geodesic", angle_1 * (180 / Math.PI), angle_1)
+    //console.log("Angle with geodesic",angle_2*(180/Math.PI),angle_2)
+    this.setAngles(true) //Reset
+  }
+
+
   render() {
     let edgesFigure //Polyline to be sended to LeftButtonMap in order to create the figure. Check what type of join is selected
     if (this.state.drawPolylinesMany2One && this.state.markers2PolyMany2One[0].lat !== '') { edgesFigure = this.state.markers2PolyMany2One; edgesFigure.typeJoin = 'Many2One' }
     else if (this.state.drawPolylinesManually && this.state.markers2PolyManually[0].lat !== '') { edgesFigure = this.state.markers2PolyManually; edgesFigure.typeJoin = 'Manually' }
     else { edgesFigure = this.state.markers2PolyStack; edgesFigure.typeJoin = 'Stack' }
+
+    const triangleCoords = [
+      { lat: 25.774, lng: -80.190 },
+      { lat: 18.466, lng: -66.118 },
+      { lat: 32.321, lng: -64.757 },
+      { lat: 25.774, lng: -80.190 }
+    ];
+
 
     const LeftButtonsMapProps = {
       addMarker: this.addMarker.bind(this),
@@ -234,6 +342,8 @@ class MapFree extends Component {
       generatePolylineStack: this.generatePolylineStack.bind(this),
       generatePolylineManually: this.generatePolylineManually.bind(this),
       generatePolylineMany2One: this.generatePolylineMany2One.bind(this),
+      setAngles: this.setAngles.bind(this),
+      getAngle: this.state.getAngle,
       resetPolylines: this.resetAll.bind(this)
     }
 
@@ -249,6 +359,7 @@ class MapFree extends Component {
           }}
           mapTypeControl={false}
         >
+
           <LeftButtonsMapFree LeftButtonsMapProps={LeftButtonsMapProps} />
           <BottomButtonsMapFree BottomButtonsMapProps={BottomButtonsMapProps} />
           {this.state.markers.map((marker, i) => {
@@ -267,8 +378,8 @@ class MapFree extends Component {
             else return null
           })}
           {/*Check what figure can be rendered in the map based in length and selection by the user*/}
-          {this.state.drawPolylinesStack && this.state.markers2PolyStack[0].lat !== ''
-            && <Polyline path={this.state.markers2PolyStack} strokeColor="#0000FF" />}
+          {this.state.drawPolylinesStack
+            && <Polyline path={triangleCoords} strokeColor="#0000FF" />}
           {this.state.drawPolylinesManually && this.state.markers2PolyManually[0].lat !== ''
             && <Polyline path={this.state.markers2PolyManually} strokeColor="#00FF00" />}
           {this.state.drawPolylinesMany2One && this.state.markers2PolyMany2One[0].lat !== ''
@@ -277,7 +388,7 @@ class MapFree extends Component {
       </ApolloProvider>
     );
   }
-}
+} 
 
 export default GoogleApiWrapper({
   apiKey: (config.API_KEY)

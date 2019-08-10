@@ -1,7 +1,7 @@
 /* 
 Author: Sebastian Mancipe
 Date: 
-Last update: July 19 - 2019
+Last update: August 10 - 2019
 Description: 
 This component contains the view figures map. Acording to the selected Figure (from FiguresList component),
 renders the polylines and markers related.
@@ -10,7 +10,7 @@ renders the polylines and markers related.
 import React, { Component } from 'react'
 import config from '../others/config.js'
 import FiguresList from './FiguresList'
-import { Map, GoogleApiWrapper, Marker, Polyline } from 'google-maps-react'
+import { Map, GoogleApiWrapper, Marker, Polyline, Polygon } from 'google-maps-react'
 import '../styles/map_free.css'
 
 
@@ -47,6 +47,7 @@ class MapView extends Component {
         lat: 15.5,
         lng: 45.5
       },
+      isComplete: false,
       zoom: 4
     }
     this.onMarkerClick = this.onMarkerClick.bind(this);
@@ -66,7 +67,10 @@ class MapView extends Component {
   updateEdges(edges){
     console.log(edges)
     let markers,markers2PolyView,markerFrom,markerTo
-    edges.forEach(function(edge){
+    const firstPlace=edges[0].PlaceFrom,lastPlace=edges[edges.length-1].PlaceTo;
+    console.log((firstPlace.Id === lastPlace.Id),"firstPlace",firstPlace, "lastPlace",lastPlace)
+    this.setState({isComplete:(firstPlace.Id === lastPlace.Id)?true:false})
+    edges.forEach(function(edge,i){
     markerFrom = {id:edge.PlaceFrom.Id,lat:edge.PlaceFrom.Latitude,lng:edge.PlaceFrom.Longitude,text_mark: edge.PlaceFrom.Name}
     markerTo = {id:edge.PlaceTo.Id,lat:edge.PlaceTo.Latitude,lng:edge.PlaceTo.Longitude,text_mark: edge.PlaceTo.Name}
     if (markers===undefined) {
@@ -123,7 +127,14 @@ class MapView extends Component {
             else return null
           })}
           {/*Check what figure can be rendered in the map based in length and selection by the user*/}
-          {this.state.markers2PolyView[0].lat !== ''
+          {this.state.isComplete && <Polygon
+          paths={this.state.markers2PolyView}
+          strokeColor="#0000FF"
+          strokeOpacity={0.8}
+          strokeWeight={2}
+          fillColor="#0000FF"
+          fillOpacity={0.35} />}
+          {!this.state.isComplete && this.state.markers2PolyView[0].lat !== ''
             && <Polyline path={this.state.markers2PolyView} strokeColor="#00FFFF" />}
         </Map>
       </ApolloProvider>

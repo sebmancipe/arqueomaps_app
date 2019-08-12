@@ -8,10 +8,10 @@ renders the polylines and markers related.
 */
 
 import React, { Component } from 'react'
-import config from '../others/config.js'
+import config from '../../../others/config.js'
 import FiguresList from './FiguresList'
 import { Map, GoogleApiWrapper, Marker, Polyline, Polygon } from 'google-maps-react'
-import '../styles/map_free.css'
+import '../../../styles/map_free.css'
 
 
 // Imports to apollo-client and connection to graphql

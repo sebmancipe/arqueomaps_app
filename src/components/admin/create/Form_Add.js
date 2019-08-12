@@ -10,7 +10,7 @@ Contains the main configuration of Apollo Client too
 import React, { Component } from 'react'
 import { Form, Button,Container } from 'react-bootstrap'
 import PlaceInputs from './PlaceInputs'
-import config from '../others/config'
+import config from '../../../others/config'
 import CivilizationAdd from './CivilizationAdd'
 
 

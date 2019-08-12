@@ -10,7 +10,7 @@ Contains the main configuration of Apollo Client also
 
 import React, { Component } from 'react'
 import {Dropdown,Container} from 'react-bootstrap'
-import config from '../others/config'
+import config from '../../../others/config'
 import 'bootstrap/dist/css/bootstrap.css'
 import CivilizationList from './CivilizationList'
 import PlacesList from './PlacesList'

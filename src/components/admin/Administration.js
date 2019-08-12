@@ -9,7 +9,7 @@
   import React, { Component } from 'react'
   import { Button, ButtonToolbar, Container} from 'react-bootstrap'
   import {NavLink} from 'react-router-dom'
-  import '../styles/main.css'
+  import '../../styles/main.css'
 
   const admin_buttons_style ={
     margin: '5px'

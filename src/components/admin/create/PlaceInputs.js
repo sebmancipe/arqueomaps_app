@@ -5,6 +5,7 @@ Last update: July 3 - 2019
 Description: 
 This component is used for the form input of a place according the props input of places.
 Contains two main renderings, one for multiples place's inputs and other one to a single input (for Edit section) 
+Is used in create and list/edit section
 */
 import React, { Component } from 'react'
 import { Form, Col } from 'react-bootstrap'

@@ -9,9 +9,9 @@ Last update comment: Added projection from
 */
 
 import React, { Component } from 'react'
-import config from '../others/config.js'
-import LeftButtonsMap from './LeftButtonsMap'
-import BottomButtonsMapFree from './BottomButtonsMapFree'
+import config from '../../../others/config.js'
+import LeftButtonsMap from '../operations/LeftButtonsMap'
+import BottomButtonsMapFree from '../operations/BottomButtonsMapFree'
 import { Map, GoogleApiWrapper, Marker, Polyline } from 'google-maps-react'
 
 
@@ -20,7 +20,7 @@ import { ApolloProvider } from 'react-apollo'
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import '../styles/map_full.css'
+import '../../../styles/map_full.css'
 
 const httpLink = createHttpLink({
   uri: config.HOST

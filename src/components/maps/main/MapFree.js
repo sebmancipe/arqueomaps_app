@@ -9,12 +9,12 @@ Last update comment: Added projection based in a reference point, distance and a
 */
 
 import React, { Component } from 'react'
-import config from '../others/config.js'
-import LeftButtonsMapFree from './LeftButtonsMapFree'
-import BottomButtonsMapFree from './BottomButtonsMapFree'
+import config from '../../../others/config.js'
+import LeftButtonsMapFree from '../operations/LeftButtonsMapFree'
+import BottomButtonsMapFree from '../operations/BottomButtonsMapFree'
 import { Map, GoogleApiWrapper, Marker, Polyline } from 'google-maps-react'
-import '../styles/map_free.css'
-import mapStyles from "../styles/mapStyles"
+import '../../../styles/map_free.css'
+import mapStyles from "../../../styles/mapStyles"
 
 // Imports to apollo-client and connection to graphql
 import { ApolloProvider } from 'react-apollo'

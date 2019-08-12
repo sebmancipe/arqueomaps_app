@@ -1,10 +1,11 @@
 /* 
 Author: Sebastian Mancipe
 Date: 
-Last update: August 10 - 2019
+Last update: August 11 - 2019
 Description: 
 This component contains the fast map, markers and polylines loaded on it. 
 Executes methods to get distance, join markers manually, by stack (arrive order) or to a specific point
+Last update comment: Added projection based in a reference point, distance and angle
 */
 
 import React, { Component } from 'react'
@@ -13,6 +14,7 @@ import LeftButtonsMapFree from './LeftButtonsMapFree'
 import BottomButtonsMapFree from './BottomButtonsMapFree'
 import { Map, GoogleApiWrapper, Marker, Polyline } from 'google-maps-react'
 import '../styles/map_free.css'
+import mapStyles from "../styles/mapStyles"
 
 // Imports to apollo-client and connection to graphql
 import { ApolloProvider } from 'react-apollo'
@@ -59,13 +61,27 @@ class MapFree extends Component {
         lng: 45.5
       },
       zoom: 4,
-      //Control variables to show or no the polylines
+      //Control variables to show or not the polylines
       drawPolylinesStack: false,
       drawPolylinesManually: false,
       drawPolylinesMany2One: false,
+      //Angle sentinel
       getAngle: false,
       markers2Angle: [{ id: '', lat: '', lng: '' }],
-      id_figure: ''
+      //Info window's sentinel
+      /*clickedInfo: true,
+      selectedMarker:{
+        name:'',
+        lat:0,
+        lng:0,
+        angle:0,
+        poly1:{},
+        ploy2:{}
+      },*/
+      id_figure: '',
+      //Projection
+      markerFromProjection:{},
+      isProjectable:false
     }
     this.onMarkerClick = this.onMarkerClick.bind(this);
   }
@@ -128,6 +144,15 @@ class MapFree extends Component {
     }
   }
 
+  isProjectable(isReset){
+    if(isReset){
+      this.setState({markerFromProjection:{}})
+      this.setState({isProjectable:false})
+      console.log("Is reset projectable")
+      //Delete or not the projected marker?
+    }else this.setState({isProjectable:true})
+  }
+
   //Method called from BottomButtonsMap that resets all states except markers
   //Here its reseted the id_figure to avoid resend with the same id
   resetAll() {
@@ -141,6 +166,8 @@ class MapFree extends Component {
     this.setState({ drawPolylinesMany2One: false })
     this.setState({ drawPolylinesStack: false })
     this.setState({ getAngle: false })
+    this.setState({ isProjectable:false })
+    this.setState({ markerFromProjection:{}})
     this.setState({ id_figure: '' })
   }
 
@@ -184,12 +211,22 @@ class MapFree extends Component {
     const markersTemp = this.state.markers
     //*Search for the place selected in the markers array
     const placeSelected = markersTemp.find(place => place.text_mark === props.label && place.lat === props.position.lat && place.lng === props.position.lng);
+    console.log("onMarkerClick",this.state.isProjectable)
     if (this.state.drawPolylinesManually) {
       this.markersJoinManually(placeSelected)
     } else if (this.state.drawPolylinesMany2One)
       this.markersJoinMany2One(placeSelected)
     else if (this.state.getAngle)
       this.getAngleBetweenMarkers(placeSelected)
+    //TODO: Show window
+      /*else if (this.state.clickedInfo){
+      this.setSelectedMarker(placeSelected)
+    }*/
+    //Project a marker from this
+    else if (this.state.isProjectable){
+      this.setState({markerFromProjection:placeSelected})
+    }
+      
   }
 
   //Adds a marker in the map and update both, marker and markers2PolyStack.
@@ -244,6 +281,7 @@ class MapFree extends Component {
       Math.sin(dLong / 2) * Math.sin(dLong / 2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c;
+    console.log("Distance: ",d)
     return d; // returns the distance in meter
   }
 
@@ -318,6 +356,103 @@ class MapFree extends Component {
     this.setAngles(true) //Reset
   }
 
+  //TODO: Used in setMarkerSelected
+  /*getAngleFromMarkers(placeSource,place1,place2){
+    var lato = placeSource.lat, lngo = placeSource.lng;
+    var lat1 = place1.lat, lng1 = place1.lng;
+    var lat2 = place2.lat, lng2 = place2.lng;
+
+    var x1 = R * Math.cos(lat1) * Math.cos(lng1);
+    var y1 = R * Math.cos(lat1) * Math.sin(lng1);
+    var z1 = R * Math.sin(lat1);
+    console.log("Coordinates vector 1", x1, y1, z1)
+
+    var x2 = R * Math.cos(lat2) * Math.cos(lng2);
+    var y2 = R * Math.cos(lat2) * Math.sin(lng2);
+    var z2 = R * Math.sin(lat2);
+    console.log("Coordinates vector 2", x2, y2, z2)
+
+    var xo = R * Math.cos(lato) * Math.cos(lngo);
+    var yo = R * Math.cos(lato) * Math.sin(lngo);
+    var zo = R * Math.sin(lato);
+    console.log("Coordinates origin", xo, yo, zo)
+
+    var vector1 = {
+      x: (x1 - xo),
+      y: (y1 - yo),
+      z: (z1 - zo)
+    }
+    console.log("Vector 1", vector1)
+    var vector2 = {
+      x: (x2 - xo),
+      y: (y2 - yo),
+      z: (z2 - zo)
+    }
+    console.log("Vector 2", vector2)
+
+    var dot_product = vector1.x * vector2.x + vector1.y * vector2.y + vector1.z * vector2.z;
+    console.log("Dot product", dot_product)
+    //var magnitudes_product = this.getDistance(markers2Angle[1],markers2Angle[0])*this.getDistance(markers2Angle[2],markers2Angle[0])
+    var magnitude_1 = (Math.sqrt(Math.pow(vector1.x, 2) + Math.pow(vector1.y, 2) + Math.pow(vector1.z, 2)));
+    var magnitude_2 = (Math.sqrt(Math.pow(vector2.x, 2) + Math.pow(vector1.y, 2) + Math.pow(vector1.z, 2)));
+    console.log("Magnitude 1", magnitude_1, "Magnitude 2", magnitude_2)
+    var magnitudes_product_2 = magnitude_1 * magnitude_2
+    //console.log("Magnitudes product with geodesic ",magnitudes_product,"Magnitudes product whitout geodesic",magnitudes_product_2)
+    var angle_1 = Math.acos(dot_product / magnitudes_product_2);
+    //var angle_2 = Math.acos(dot_product/magnitudes_product);
+    console.log("Angle without geodesic", angle_1 * (180 / Math.PI), angle_1)
+    //console.log("Angle with geodesic",angle_2*(180/Math.PI),angle_2)
+    return angle_1 * (180 / Math.PI);
+  }*/
+
+
+  //TODO: Show an info window to load distance, angles and information about the marker selected
+  /*setSelectedMarker(placeSelected){
+    console.log(placeSelected)
+    if(placeSelected===null){
+      this.setState({selectedMarker:{
+        name:'',
+        lat:0,
+        lng:0,
+        angle:0,
+        poly1:{},
+        poly2:{}
+      }},this.setState({clickedInfo:false}));
+    }else{
+      var markers2Check, nextPlace={}, fromPlace={}, isFirst
+
+      if(this.state.drawPolylinesMany2One) markers2Check=[...this.state.markers2PolyMany2One]; //Check algorithm to many2one
+      else if(this.state.drawPolylinesManually) markers2Check=[...this.state.markers2PolyManually];
+      else markers2Check=[...this.state.markers2PolyStack]
+
+      isFirst=(placeSelected.id===markers2Check[0].id)&&(markers2Check[0].id===markers2Check[markers2Check.length-1].id)
+      
+      if(isFirst){
+        nextPlace=markers2Check[1]
+        fromPlace=markers2Check[markers2Check.length-2]
+      }else{
+        markers2Check.map(function(marker,i,array){
+          if(marker.id===placeSelected.id){
+            fromPlace=array[i-1];
+            fromPlace.dist=marker.dist;
+            nextPlace=array[i+1];
+            return null
+          } 
+        })
+      }
+      var selectedMarker={
+        name:placeSelected.text_mark,
+        lat:placeSelected.lat,
+        lng: placeSelected.lng,
+        angle:this.getAngleBetweenMarkers(placeSelected,fromPlace,nextPlace),
+        poly1:fromPlace,
+        poly2:nextPlace
+      }
+      console.log("Window info ",selectedMarker)
+      this.setState({selectedMarker})
+    }
+  }*/
+
 
   render() {
     let edgesFigure //Polyline to be sended to LeftButtonMap in order to create the figure. Check what type of join is selected
@@ -344,7 +479,10 @@ class MapFree extends Component {
       generatePolylineMany2One: this.generatePolylineMany2One.bind(this),
       setAngles: this.setAngles.bind(this),
       getAngle: this.state.getAngle,
-      resetPolylines: this.resetAll.bind(this)
+      resetPolylines: this.resetAll.bind(this),
+      addMarker: this.addMarker.bind(this),
+      markerSelected: this.state.markerFromProjection,
+      isProjectable: this.isProjectable.bind(this)
     }
 
     return (
@@ -358,6 +496,7 @@ class MapFree extends Component {
             lng: -74.063644
           }}
           mapTypeControl={false}
+          styles={mapStyles}
         >
 
           <LeftButtonsMapFree LeftButtonsMapProps={LeftButtonsMapProps} />
@@ -384,11 +523,28 @@ class MapFree extends Component {
             && <Polyline path={this.state.markers2PolyManually} strokeColor="#00FF00" />}
           {this.state.drawPolylinesMany2One && this.state.markers2PolyMany2One[0].lat !== ''
             && <Polyline path={this.state.markers2PolyMany2One} strokeColor="#FF0000" />}
+
+          {/*this.state.clickedInfo && this.state.selectedMarker.lat!==0 && <InfoWindow
+            onCloseClick={() => {
+              this.setSelectedMarker(null);
+            }}
+            position={{
+              lat: this.state.selectedMarker.lat,
+              lng: this.state.selectedMarker.lng
+            }}
+          >
+            <div>
+              <h2>{this.state.selectedMarker.name}</h2>
+              <p>Angle: {this.state.selectedMarker.angle}</p>
+              <p>{this.state.selectedMarker.poly1.dist}</p>
+              <p>{this.state.selectedMarker.poly2.dist}</p>
+            </div>
+          </InfoWindow>*/}
         </Map>
       </ApolloProvider>
     );
   }
-} 
+}
 
 export default GoogleApiWrapper({
   apiKey: (config.API_KEY)

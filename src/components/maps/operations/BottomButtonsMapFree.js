@@ -2,15 +2,16 @@
 /* 
 Author: Sebastian Mancipe
 Date: 
-Last update: August 11 - 2019
+Last update: August 25 - 2019
 Description: 
 This component contains the bottom section of buttons that reset, shows or allow the creation of 
 polylines based in the user input. 
-Last update comment: Added projection based in a reference point, distance and angle
+Last update comment: Added InformationSection component
 */
 
 import React, { Component } from 'react'
 import { ButtonGroup, Button, Dropdown, DropdownButton, OverlayTrigger, Form, Row, Popover, Col } from 'react-bootstrap'
+import InformationSection from '../information/InformationSection'
 
 
 const R = 6371e3; // Earth’s radius in meter
@@ -58,7 +59,7 @@ class BottomButtonsMapFree extends Component {
   }
 
   setAngles = (e) => {
-    this.props.BottomButtonsMapProps.setAngles(false)
+    this.props.BottomButtonsMapProps.setAngles(this.props.BottomButtonsMapProps.getAngle?true:false)
   }
 
   resetPolylines() {
@@ -81,18 +82,18 @@ class BottomButtonsMapFree extends Component {
     var lngSource = startMarker.lng
     var angle = (this.state.projected_place.angle)
 
-    const δ = d / R; // angular distance in radians
-    const θ = Number(angle).toRadians();
-    const φ1 = latSource.toRadians(), λ1 = lngSource.toRadians();
+    const angular_distance = d / R; // angular distance in radians
+    const angle_radians = Number(angle).toRadians();
+    const lat1 = latSource.toRadians(), long1 = lngSource.toRadians();
 
-    const sinφ2 = Math.sin(φ1) * Math.cos(δ) + Math.cos(φ1) * Math.sin(δ) * Math.cos(θ);
-    const φ2 = Math.asin(sinφ2);
-    const y = Math.sin(θ) * Math.sin(δ) * Math.cos(φ1);
-    const x = Math.cos(δ) - Math.sin(φ1) * sinφ2;
-    const λ2 = λ1 + Math.atan2(y, x);
+    const sinlat2 = Math.sin(lat1) * Math.cos(angular_distance) + Math.cos(lat1) * Math.sin(angular_distance) * Math.cos(angle_radians);
+    const lat2 = Math.asin(sinlat2);
+    const y = Math.sin(angle_radians) * Math.sin(angular_distance) * Math.cos(lat1);
+    const x = Math.cos(angular_distance) - Math.sin(lat1) * sinlat2;
+    const long2 = long1 + Math.atan2(y, x);
 
-    const lat = φ2.toDegrees();
-    const lon = λ2.toDegrees();
+    const lat = lat2.toDegrees();
+    const lon = long2.toDegrees();
 
     this.props.BottomButtonsMapProps.addMarker(
       -1,
@@ -106,6 +107,12 @@ class BottomButtonsMapFree extends Component {
 
 
   render() {
+    const InfoProps ={
+      distanceInfo: this.props.BottomButtonsMapProps.distanceInformation,
+      anglesInfo: this.props.BottomButtonsMapProps.anglesInformation,
+      angle: this.props.BottomButtonsMapProps.angle
+    }
+    console.log("Bottom Buttons",InfoProps)
     return (
       <ButtonGroup size="sm" aria-label="Basic example" className="buttonGroupHorizontal">
         <Button size="sm" variant="secondary" onClick={this.resetPolylines}>Reset</Button>
@@ -163,6 +170,8 @@ class BottomButtonsMapFree extends Component {
           </Popover>
         }><Button size="sm" variant="success">Proyección</Button>
         </OverlayTrigger>
+
+        <InformationSection InfoProps={InfoProps}/>
       </ButtonGroup>
     )
   }

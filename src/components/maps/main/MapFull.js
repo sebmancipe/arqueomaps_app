@@ -1,11 +1,11 @@
 /* 
 Author: Sebastian Mancipe
 Date: 
-Last update: August 11 - 2019
+Last update: August 25 - 2019
 Description: 
 This component contains the normal map, markers and polylines loaded on it from civilizations or tags. 
 Executes methods to get distance, join markers manually, by stack (arrive order) or to a specific point
-Last update comment: Added projection from 
+Last update comment: Added information section
 */
 
 import React, { Component } from 'react'
@@ -34,6 +34,7 @@ const client = new ApolloClient({
 
 const R = 6371e3; // Earth’s radius in meter
 
+//TODO: Check a way to conserve the polyline when getting angles
 class MapFull extends Component {
   constructor(props) {
     super(props);
@@ -46,10 +47,10 @@ class MapFull extends Component {
                 { id:'4',lat: '4.598083', lng: '-74.076043', text_mark: "Plaza Simón Bolivar" }],*/
       markers: [{ id: 1, lat: 25.774, lng: -80.19, text_mark: 'Place 1', tag: 'Tag 1' },
       { id: 2, lat: 18.466, lng: -66.118, text_mark: 'Place 2', tag: 'Tag 1' },
-      { id: 3, lat: 32.321, lng: -64.757, text_mark: 'Place 3', tag: 'Tag 1' }],
-      markers2PolyStack: [{ id: '', lat: '', lng: '', dist: '' }],
-      markers2PolyManually: [{ id: '', lat: '', lng: '', dist: '' }],
-      markers2PolyMany2One: [{ id: '', lat: '', lng: '', dist: '' }],
+      { id: 3, lat: 32.321, lng: -64.757, text_mark: 'Place 3', tag: 'Tag 1' }],/* Bermuda's markers*/
+      markers2PolyStack: [{ id: '',name:'', lat: '', lng: '', dist: '' }],
+      markers2PolyManually: [{ id: '',name:'', lat: '', lng: '', dist: '' }],
+      markers2PolyMany2One: [{ id: '',name:'', lat: '', lng: '', dist: '' }],
       center: {
         lat: 15.5,
         lng: 45.5
@@ -60,7 +61,8 @@ class MapFull extends Component {
       drawPolylinesManually: false,
       drawPolylinesMany2One: false,
       getAngle: false,
-      markers2Angle: [{ id: '', lat: '', lng: '' }],
+      markers2Angle: [{ id: '',name:'', lat: '', lng: '' }],
+      angle:'',
       id_figure: '',
       markerFromProjection: {},
       isProjectable: false
@@ -71,13 +73,14 @@ class MapFull extends Component {
   setAngles(isReset) {
     if (isReset) {
       this.setState({ getAngle: false });
-      let markers2Angle = [{ id: '', lat: '', lng: '' }];
+      this.setState({ angle:''})
+      let markers2Angle = [{ id: '', name:'',lat: '', lng: '' }];
       this.setState({ markers2Angle })
     } else {
-      this.setState({ getAngle: (this.state.getAngle) ? false : true });
+      var getAngle = (this.state.getAngle) ? false : true //Issue, the state doesnt update in fact
+      this.setState({getAngle});
     }
-
-    if (this.state.getAngle) {
+    if (getAngle) {
       this.setState({ drawPolylinesStack: false })
       this.setState({ drawPolylinesMany2One: false })
       this.setState({ drawPolylinesManually: false })
@@ -97,7 +100,7 @@ class MapFull extends Component {
   generatePolylineManually(isReset) {
     if (isReset) {
       this.setState({ drawPolylinesManually: false })
-      let markers2PolyManually = [{ id: '', lat: '', lng: '', dist: '' }]
+      let markers2PolyManually = [{ id: '', name:'', lat: '', lng: '', dist: '' }]
       this.setState({ markers2PolyManually })
     } else
       this.setState({ drawPolylinesManually: (this.state.drawPolylinesManually) ? false : true })
@@ -114,7 +117,7 @@ class MapFull extends Component {
   generatePolylineMany2One(isReset) {
     if (isReset) {
       this.setState({ drawPolylinesMany2One: false })
-      let markers2PolyMany2One = [{ id: '', lat: '', lng: '', dist: '' }]
+      let markers2PolyMany2One = [{ id: '', name:'', lat: '', lng: '', dist: '' }]
       this.setState({ markers2PolyMany2One })
     } else
       this.setState({ drawPolylinesMany2One: (this.state.drawPolylinesMany2One) ? false : true })
@@ -138,12 +141,12 @@ class MapFull extends Component {
   //Method called from BottomButtonsMap that resets all states
   //Here its reseted the id_figure to avoid resend with the same id
   resetAll() {
-    let markers = [{ id: '', lat: '', lng: '', dist: '' }]
+    let markers = [{ id: '',text_mark:'', lat: '', lng: '', dist: '' }]
     this.setState({ markers })
-    let markers2PolyMany2One = [{ id: '', lat: '', lng: '', dist: '' }]
+    let markers2PolyMany2One = [{ id: '',name:'', lat: '', lng: '', dist: '' }]
     this.setState({ markers2PolyMany2One })
-    let markers2PolyManually = [{ id: '', lat: '', lng: '', dist: '' }]
-    let markers2Angle = [{ id: '', lat: '', lng: '' }]
+    let markers2PolyManually = [{ id: '',name:'', lat: '', lng: '', dist: '' }]
+    let markers2Angle = [{ id: '',name:'', lat: '', lng: '' }]
     this.setState({ markers2Angle })
     this.setState({ markers2PolyManually })
     this.setState({ drawPolylinesManually: false })
@@ -152,6 +155,7 @@ class MapFull extends Component {
     this.setState({ getAngle: false })
     this.setState({ isProjectable: false })
     this.setState({ markerFromProjection: {} })
+    this.setState({ angle:''})
     this.setState({ id_figure: '' })
   }
 
@@ -160,7 +164,8 @@ class MapFull extends Component {
     var p2 = {
       id: markerSelected.id,
       lat: markerSelected.lat,
-      lng: markerSelected.lng
+      lng: markerSelected.lng,
+      name: markerSelected.text_mark
     }
     let markers2PolyManually
     if (this.state.markers2PolyManually[0].lat !== '') {
@@ -168,10 +173,10 @@ class MapFull extends Component {
       markers2PolyManually = [...this.state.markers2PolyManually]
       //Get distance based in latitude and longitude of the markers
       distance = this.getDistance(markers2PolyManually[markers2PolyManually.length - 1], p2)
-      markers2PolyManually.push({ id: Number(p2.id), lat: Number(p2.lat), lng: Number(p2.lng), dist: Number(distance) })
+      markers2PolyManually.push({ id: Number(p2.id),name:p2.name, lat: Number(p2.lat), lng: Number(p2.lng), dist: Number(distance) })
     }
     else
-      markers2PolyManually = [{ id: Number(p2.id), lat: Number(p2.lat), lng: Number(p2.lng) }]
+      markers2PolyManually = [{ id: Number(p2.id),name:p2.name, lat: Number(p2.lat), lng: Number(p2.lng) }]
     this.setState({ markers2PolyManually })
   }
 
@@ -182,8 +187,8 @@ class MapFull extends Component {
       if (marker.id !== markerSelected.id) {
         let distance;
         distance = this.getDistance(marker, markerSelected)
-        markers2PolyMany2One.push({ id: Number(marker.id), lat: Number(marker.lat), lng: Number(marker.lng) })
-        markers2PolyMany2One.push({ id: Number(markerSelected.id), lat: Number(markerSelected.lat), lng: Number(markerSelected.lng), dist: Number(distance) })
+        markers2PolyMany2One.push({ id: Number(marker.id), name:marker.text_mark, lat: Number(marker.lat), lng: Number(marker.lng) })
+        markers2PolyMany2One.push({ id: Number(markerSelected.id),name:markerSelected.text_mark, lat: Number(markerSelected.lat), lng: Number(markerSelected.lng), dist: Number(distance) })
       }
     });
     this.setState({ markers2PolyMany2One })
@@ -268,11 +273,11 @@ class MapFull extends Component {
   getAngleBetweenMarkers(placeSelected) {
     var markers2Angle
     if (this.state.markers2Angle[0].lat === '') {
-      markers2Angle = [{ id: placeSelected.id, lat: placeSelected.lat, lng: placeSelected.lng }]
+      markers2Angle = [{ id: placeSelected.id,name:placeSelected.text_mark, lat: placeSelected.lat, lng: placeSelected.lng }]
       this.setState({ markers2Angle })
     } else if (this.state.markers2Angle.length <= 2) {
       markers2Angle = [...this.state.markers2Angle]
-      markers2Angle.push({ id: placeSelected.id, lat: placeSelected.lat, lng: placeSelected.lng })
+      markers2Angle.push({ id: placeSelected.id,name:placeSelected.text_mark, lat: placeSelected.lat, lng: placeSelected.lng })
       this.setState({ markers2Angle })
       if (markers2Angle.length === 3) this.getAngle()
     }
@@ -283,10 +288,7 @@ class MapFull extends Component {
   //https://math.stackexchange.com/questions/330843/angle-between-two-coordinateslatitude-longitude-from-a-position-on-earth?answertab=active#tab-top
   getAngle() {
     var markers2Angle = [...this.state.markers2Angle]
-    console.log("Total polyline", markers2Angle)
-    console.log("Origin - Place 1", markers2Angle[0])
-    console.log("Place 2", markers2Angle[1])
-    console.log("Place 3", markers2Angle[2])
+
 
     var lato = markers2Angle[0].lat, lngo = markers2Angle[0].lng;
     var lat1 = markers2Angle[1].lat, lng1 = markers2Angle[1].lng;
@@ -295,17 +297,14 @@ class MapFull extends Component {
     var x1 = R * Math.cos(lat1) * Math.cos(lng1);
     var y1 = R * Math.cos(lat1) * Math.sin(lng1);
     var z1 = R * Math.sin(lat1);
-    console.log("Coordinates vector 1", x1, y1, z1)
 
     var x2 = R * Math.cos(lat2) * Math.cos(lng2);
     var y2 = R * Math.cos(lat2) * Math.sin(lng2);
     var z2 = R * Math.sin(lat2);
-    console.log("Coordinates vector 2", x2, y2, z2)
 
     var xo = R * Math.cos(lato) * Math.cos(lngo);
     var yo = R * Math.cos(lato) * Math.sin(lngo);
     var zo = R * Math.sin(lato);
-    console.log("Coordinates origin", xo, yo, zo)
 
     var vector1 = {
       x: (x1 - xo),
@@ -332,7 +331,8 @@ class MapFull extends Component {
     //var angle_2 = Math.acos(dot_product/magnitudes_product);
     console.log("Angle without geodesic", angle_1 * (180 / Math.PI), angle_1)
     //console.log("Angle with geodesic",angle_2*(180/Math.PI),angle_2)
-    this.setAngles(true) //Reset
+    this.setState({angle:angle_1 * (180 / Math.PI)})
+    //this.setAngles(true) //Reset
   }
 
 
@@ -364,7 +364,9 @@ class MapFull extends Component {
       resetPolylines: this.resetAll.bind(this),
       addMarker: this.addMarker.bind(this),
       markerSelected: this.state.markerFromProjection,
-      isProjectable: this.isProjectable.bind(this)
+      isProjectable: this.isProjectable.bind(this),
+      anglesInformation: this.state.markers2Angle,
+      angle:this.state.angle
     }
 
     return (

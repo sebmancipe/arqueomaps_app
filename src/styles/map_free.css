@@ -19,6 +19,8 @@
     position: fixed !important;
 }
 
+
+
 /*Phone rotation on*/
 @media screen and (max-width: 736px) and (orientation:landscape) {
 

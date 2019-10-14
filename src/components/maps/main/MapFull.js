@@ -13,6 +13,7 @@ import config from '../../../others/config.js'
 import LeftButtonsMap from '../operations/LeftButtonsMap'
 import BottomButtonsMapFree from '../operations/BottomButtonsMapFree'
 import { Map, GoogleApiWrapper, Marker, Polyline } from 'google-maps-react'
+import mapStyles from "../../../styles/mapStyles" //Uncomment to mapStyles
 
 
 // Imports to apollo-client and connection to graphql
@@ -380,6 +381,7 @@ class MapFull extends Component {
             lng: -74.063644
           }}
           mapTypeControl={false}
+          styles={mapStyles}
         >
           <LeftButtonsMap LeftButtonsMapProps={LeftButtonsMapProps} />
           <BottomButtonsMapFree BottomButtonsMapProps={BottomButtonsMapProps} />

@@ -22,6 +22,7 @@ class InformationSection extends Component {
         const anglesInfo= this.props.InfoProps.anglesInfo, angle = this.props.InfoProps.angle
 
         const edgesArray = []
+        if(distanceInfo != null)
         if(distanceInfo[0].id!=='' && distanceInfo.length>2){
             if(distanceInfo.typeJoin==='Many2One'){
                 let i,j
@@ -47,7 +48,7 @@ class InformationSection extends Component {
 
         return (
             <OverlayTrigger className="" trigger="click" placement="top" overlay={
-                <Popover id="popover-basic" title="Añade una proyección" >
+                <Popover id="popover-basic" title="Información" >
                     <Table responsive variant="dark">
                     <thead>
                         <tr>

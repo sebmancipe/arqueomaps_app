@@ -14,7 +14,7 @@ import LeftButtonsMapFree from '../operations/LeftButtonsMapFree'
 import BottomButtonsMapFree from '../operations/BottomButtonsMapFree'
 import { Map, GoogleApiWrapper, Marker, Polyline } from 'google-maps-react'
 import '../../../styles/map_free.css'
-//import mapStyles from "../../../styles/mapStyles" Uncomment to mapStyles
+import mapStyles from "../../../styles/mapStyles" //Uncomment to mapStyles
 
 // Imports to apollo-client and connection to graphql
 import { ApolloProvider } from 'react-apollo'
@@ -50,9 +50,15 @@ class MapFree extends Component {
                 { id:'2',lat: '4.977777', lng: '-73.775097', text_mark: "Laguna de Guatavita" },
                 { id:'3',lat: '5.709184', lng: '-72.923647', text_mark: "Templo del Sol" },
                 { id:'4',lat: '4.598083', lng: '-74.076043', text_mark: "Plaza Simón Bolivar" }],*/
-      markers: [{ id: 1, lat: 25.774, lng: -80.19, text_mark: 'Place 1', tag: 'Tag 1' },
+      /*markers: [{ id: 1, lat: 25.774, lng: -80.19, text_mark: 'Place 1', tag: 'Tag 1' },
       { id: 2, lat: 18.466, lng: -66.118, text_mark: 'Place 2', tag: 'Tag 1' },
       { id: 3, lat: 32.321, lng: -64.757, text_mark: 'Place 3', tag: 'Tag 1' }], //Bermuda markers*/ 
+      markers: [{id: '1', lat: '4.600718', lng: '-74.077388', text_mark: "Iglesia San Juan de Dios"},
+                {id: '2', lat: '4.606205', lng: '-74.071074', text_mark: "Iglesia Nuestra Señora de las Nieves"},
+                {id: '3', lat: '4.594485', lng: '-74.074755', text_mark: "Santuario Nacional"},
+                {id: '4', lat: '4.586250', lng: '-74.065527', text_mark: "Santuario Nuestra Sra de la Peña"},
+                {id: '5', lat: '4.605690', lng: '-74.055487', text_mark: "Monserrate"},
+                {id: '6', lat: '4.598124', lng: '-74.076051', text_mark: "Plaza de Bolívar"}],
       markers2PolyStack: [{ id: '',name:'', lat: '', lng: '', dist: '' }],
       markers2PolyManually: [{ id: '',name:'', lat: '', lng: '', dist: '' }],
       markers2PolyMany2One: [{ id: '',name:'', lat: '', lng: '', dist: '' }],
@@ -498,7 +504,7 @@ class MapFree extends Component {
             lng: -74.063644
           }}
           mapTypeControl={false}
-          /*styles={mapStyles}*/
+          styles={mapStyles}//Uncomment to map styles
         >
 
           <LeftButtonsMapFree LeftButtonsMapProps={LeftButtonsMapProps} />

@@ -1,4 +1,5 @@
 /* eslint-disable no-extend-native */
+/*eslint no-extend-native: ["error", { "exceptions": ["Object"] }]*/
 /* 
 Author: Sebastian Mancipe
 Date: 
@@ -78,8 +79,8 @@ class BottomButtonsMapFree extends Component {
     e.preventDefault()
     var startMarker = this.props.BottomButtonsMapProps.markerSelected
     var d = (this.state.projected_place.distance) * 1000
-    var latSource = startMarker.lat
-    var lngSource = startMarker.lng
+    var latSource = Number(startMarker.lat)
+    var lngSource = Number(startMarker.lng)
     var angle = (this.state.projected_place.angle)
 
     const angular_distance = d / R; // angular distance in radians

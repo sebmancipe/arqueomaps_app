@@ -8,7 +8,7 @@ renders the polylines and markers related.
 */
 
 import React, { Component } from "react";
-import config from "../../../others/config.js";
+//import config from "../../../others/config.js";
 import FiguresList from "./FiguresList";
 import {
   Map,
@@ -26,7 +26,7 @@ import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 
 const httpLink = createHttpLink({
-  uri: config.HOST,
+  uri: "config.HOST",
 });
 
 // 3

@@ -2,17 +2,6 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,700");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
 
-@font-face {
-  font-family: "Ubuntu";
-  font-style: normal;
-  font-weight: 400;
-  src: local("Ubuntu"), url(http://example.com/fonts/ubuntu.woff) format("woff");
-}
-
-body {
-  font-family: Ubuntu, "times new roman", times, roman, serif;
-}
-
 a {
   color: white;
   text-decoration: underline;

@@ -21,6 +21,7 @@ import { ApolloProvider } from "react-apollo";
 import { ApolloClient } from "apollo-client";
 import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
+import config from "../../../others/config";
 
 const httpLink = createHttpLink({
   uri: "config.HOST",
@@ -696,6 +697,6 @@ class MapFree extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: process.env.API_KEY,
+  apiKey: config.API_KEY,
 })(MapFree);
 // https://istarkov.github.io/google-map-thousands-markers/

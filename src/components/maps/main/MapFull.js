@@ -9,7 +9,7 @@ Last update comment: Added information section
 */
 
 import React, { Component } from "react";
-//import config from "../../../others/config.js";
+import config from "../../../others/config.js";
 import LeftButtonsMap from "../operations/LeftButtonsMap";
 import BottomButtonsMapFree from "../operations/BottomButtonsMapFree";
 import { Map, GoogleApiWrapper, Marker, Polyline } from "google-maps-react";
@@ -23,7 +23,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import "../../../styles/map_full.css";
 
 const httpLink = createHttpLink({
-  uri: "config.HOST",
+  uri: config.HOST,
 });
 
 // 3
@@ -527,6 +527,6 @@ class MapFull extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: process.env.API_KEY,
+  apiKey: config.API_KEY,
 })(MapFull);
 // https://istarkov.github.io/google-map-thousands-markers/

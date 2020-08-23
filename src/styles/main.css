@@ -2,40 +2,60 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,700");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
 
+@font-face {
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Ubuntu"), url(http://example.com/fonts/ubuntu.woff) format("woff");
+}
+
+body {
+  font-family: Ubuntu, "times new roman", times, roman, serif;
+}
+
+a {
+  color: white;
+  text-decoration: underline;
+}
+
 #render_component {
-	height: 100vh;
+  height: 100vh;
 }
 
 .box-gallery {
-	height: 100vh;
+  height: 100vh;
+}
+
+#warning_test {
+  margin-top: 200px;
+  font-size: medium;
+  color: white;
 }
 
 #main_container {
-	font-family: "Roboto", sans-serif;
-	font-size: 16pt;
-	font-weight: 400;
-	width: 100%;
-	height: 100vh;
-	letter-spacing: -0.01em;
-	position: relative;
-	padding: 8em 3.5em 3.5em 0em;
-	z-index: 100;
+  font-family: "Roboto", sans-serif;
+  font-size: 16pt;
+  font-weight: 400;
+  width: 100%;
+  height: 100vh;
+  letter-spacing: -0.01em;
+  position: relative;
+  padding: 8em 3.5em 3.5em 0em;
+  z-index: 100;
 }
 
 #orientation_message {
-	display: none;
+  display: none;
 }
 
 .box-gallery {
-	z-index: -100;
+  z-index: -100;
 }
 
 @media screen and (max-width: 1680px) {
-
-	#main_container {
-		padding: 8em 3.5em 3.5em 0em;
-	}
-
+  #main_container {
+    padding: 8em 3.5em 3.5em 0em;
+  }
 }
 
 /*
@@ -57,100 +77,93 @@
  }
  */
 
-
 @media screen and (max-width: 1280px) {
-
-	#main_container {
-		padding: 15em 3.5em 3.5em 3.5em;
-		font-size: 11pt;
-	}
-
+  #main_container {
+    padding: 15em 3.5em 3.5em 3.5em;
+    font-size: 11pt;
+  }
 }
 
 /*Phone*/
-@media screen and (max-width: 736px) and (orientation:portrait) {
-
-	#main_container {
-		padding: 2.5em 2em 2em 0em;
-		font-size: 11pt;
-	}
-
+@media screen and (max-width: 736px) and (orientation: portrait) {
+  #main_container {
+    padding: 2.5em 2em 2em 0em;
+    font-size: 11pt;
+  }
 }
 
 @media screen and (max-width: 360px) {
+  #main_container {
+    padding: 1.5em 1.25em 1.25em 0em;
+    font-size: 11pt;
+  }
 
-	#main_container {
-		padding: 1.5em 1.25em 1.25em 0em;
-		font-size: 11pt;
-	}
-
-	#footer {
-		padding: 7em 0em 2em 2em;
-	}
-
+  #footer {
+    padding: 7em 0em 2em 2em;
+  }
 }
-
-
 
 /* Header */
 
+#header {
+  margin-top: 2em;
+}
+
 #header h1 {
-	font-size: 3.25em;
-	margin: 0 0 0.55em 0;
-	color: white;
+  font-size: 3.25em;
+  margin: 0 0 0.55em 0;
+  color: white;
 }
 
 #header p {
-	font-size: 1.35em;
-	line-height: 1.65em;
-	color: white;
+  font-size: 1.35em;
+  line-height: 1.65em;
+  color: white;
 }
 
 #header a {
-	color: inherit;
+  color: inherit;
 }
 
 #selection_container {
-	width: 100%;
-	margin-bottom: 10em;
-	padding-left: 0px;
+  width: 100%;
+  margin-bottom: 15em;
+  padding-left: 0px;
+  margin-top: 7em;
 }
 
 #admin_button {
-	width: auto;
-	float: left;
-	margin-right: 15px;
+  width: auto;
+  float: left;
+  margin-right: 15px;
 }
 
 #map_button {
-	width: auto;
-	float: left;
+  width: auto;
+  float: left;
 }
 
 #footer {
-	-moz-transition: opacity 0.5s ease-in-out;
-	-webkit-transition: opacity 0.5s ease-in-out;
-	-ms-transition: opacity 0.5s ease-in-out;
-	transition: opacity 0.5s ease-in-out;
-	color: cornflowerblue;
-	opacity: 0.5;
+  -moz-transition: opacity 0.5s ease-in-out;
+  -webkit-transition: opacity 0.5s ease-in-out;
+  -ms-transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
+  color: cornflowerblue;
+  opacity: 0.5;
 }
-
 
 #footer .icons {
-	margin: 0 0 0 0;
-	font-family: "Roboto", sans-serif;
-	font-size: 12pt;
+  margin: 0 0 0 0;
+  font-family: "U", sans-serif;
+  font-size: 12pt;
 }
-
 
 #footer:hover {
-	opacity: 1;
+  opacity: 1;
 }
 
-
-#footer> :last-child {
-	margin-left: 15px;
+#footer > :last-child {
+  margin-left: 15px;
 }
 
 /*@media screen and (max-width: 1680px) {
@@ -163,11 +176,9 @@
     }*/
 
 @media screen and (max-width: 736px) {
-
-	.icons {
-		border: 12em;
-	}
-
+  .icons {
+    border: 12em;
+  }
 }
 
 /*
@@ -192,94 +203,87 @@
 	}*/
 
 ul.icons {
-	cursor: default;
-	list-style: none;
-	padding-left: 0;
+  cursor: default;
+  list-style: none;
+  padding-left: 0;
 }
 
 ul.icons li {
-	display: inline-block;
-	padding: 0 1em 0 0;
+  display: inline-block;
+  padding: 0 1em 0 0;
 }
 
 ul.icons li:last-child {
-	padding-right: 0;
+  padding-right: 0;
 }
 
 ul.icons li .icon:before {
-	font-size: 1.25em;
+  font-size: 1.25em;
 }
 
 ul.icons li a {
-	color: inherit;
+  color: inherit;
 }
 
-
 /*Phone rotation off*/
-@media screen and (max-height: 736px) and (orientation:portrait) {
+@media screen and (max-height: 736px) and (orientation: portrait) {
+  #main_container {
+    padding: 2.5em 2em 2em 0em;
+    font-size: 11pt;
+    margin-top: 4em;
+  }
 
-	#main_container {
-		padding: 2.5em 2em 2em 0em;
-		font-size: 11pt;
-		margin-top: 4em;
-	}
+  #footer {
+    margin-top: 5em;
+    margin-bottom: 0em;
+  }
 
-	#footer {
-		margin-top: 5em;
-		margin-bottom: 0em;
-	}
+  #admin_button {
+    margin-bottom: 1em;
+  }
 
-	#admin_button {
-		margin-bottom: 1em;
-	}
+  #orientation_message {
+    display: block;
+    color: azure;
+    color-adjust: inherit;
+    font-size: 8pt;
+  }
 
-	#orientation_message {
-		display: block;
-		color: azure;
-		color-adjust: inherit;
-		font-size: 8pt;
-	}
-
-
-	#dropdown_Civlist {
-		font-size: 0.5em;
-	}
-
+  #dropdown_Civlist {
+    font-size: 0.5em;
+  }
 }
 
 /*Phone rotation on*/
-@media screen and (max-width: 736px) and (orientation:landscape) {
+@media screen and (max-width: 736px) and (orientation: landscape) {
+  #main_container {
+    padding: 1em 2em 0 0em;
+    font-size: 11pt;
+    margin-top: 0;
+  }
 
-	#main_container {
-		padding: 1em 2em 0 0em;
-		font-size: 11pt;
-		margin-top: 0;
-	}
+  #footer {
+    margin-top: 5em;
+    margin-bottom: 0em;
+  }
 
-	#footer {
-		margin-top: 5em;
-		margin-bottom: 0em;
-	}
-
-	#selection_container {
-		margin-bottom: 8em;
-	}
-
+  #selection_container {
+    margin-bottom: 8em;
+  }
 }
 
 #background_div {
-	background-image: url('../images/back02.jpg');
-	background-position: center;
-	background-repeat: repeat;
-	background-size: cover;
-	position: fixed;
+  background-image: url("../images/back02.jpg");
+  background-position: center;
+  background-repeat: repeat;
+  background-size: cover;
+  position: fixed;
 }
 
 #form_add {
-	color: white;
+  color: white;
 }
 
-
 h4 {
-	color: white;
+  color: white;
 }

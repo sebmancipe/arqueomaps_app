@@ -7,56 +7,62 @@ This component executes the query to get all the civilizations avaliables.
 Is used in Form_Edit component 
 */
 
-import React, { Component } from 'react'
-import { Dropdown } from 'react-bootstrap'
-import { Query } from 'react-apollo'
-import gql from 'graphql-tag'
+import React, { Component } from "react";
+import { Dropdown } from "react-bootstrap";
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
 
 const CIV_QUERY = gql`
-{
-  getAllCivilizations {
-    Id
-    Name
+  {
+    getAllCivilizations {
+      Id
+      Name
+    }
   }
-}
-`
+`;
 
 class CivilizationList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      
-    }
+    this.state = {};
   }
   //TODO: Check the return value in PlacesList
   requestPlaces(civilizationId) {
-    this.props.onSelectedCiv(
-      civilizationId
-    )
+    this.props.onSelectedCiv(civilizationId);
   }
 
   render() {
     return (
       <Dropdown.Menu>
-      <Query query={CIV_QUERY} pollInterval={500}>
-        {({ loading, error, data }) => {
-          if (loading) return <div>Loading</div>
-          if (error) return <div>Error</div>
-          if (data){
-            const civilizationsToRender = data.getAllCivilizations
-            var civResult = civilizationsToRender.map(civilization =>
-                <Dropdown.Item onClick={() => { this.requestPlaces(civilization.Id) }} key={civilization.Id}>
-                {civilization.Id} - {civilization.Name}
+        <Query query={CIV_QUERY} pollInterval={500}>
+          {({ loading, error, data }) => {
+            if (loading)
+              return (
+                <div>Por el momento no hay civilizaciones que mostrarte</div>
+              );
+            if (error)
+              return (
+                <div>Por el momento no hay civilizaciones que mostrarte</div>
+              );
+            if (data) {
+              const civilizationsToRender = data.getAllCivilizations;
+              var civResult = civilizationsToRender.map((civilization) => (
+                <Dropdown.Item
+                  onClick={() => {
+                    this.requestPlaces(civilization.Id);
+                  }}
+                  key={civilization.Id}
+                >
+                  {civilization.Id} - {civilization.Name}
                 </Dropdown.Item>
-                )
-            return civResult
-          }
-        }
-        }
-      </Query>
+              ));
+              return civResult;
+            }
+          }}
+        </Query>
       </Dropdown.Menu>
-    )
+    );
   }
 }
 
-export default CivilizationList
+export default CivilizationList;

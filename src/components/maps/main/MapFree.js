@@ -696,6 +696,6 @@ class MapFree extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyBv37UltZvh54nUAnBdkrmzXjHUcWaZGN8",
+  apiKey: process.env.API_KEY,
 })(MapFree);
 // https://istarkov.github.io/google-map-thousands-markers/

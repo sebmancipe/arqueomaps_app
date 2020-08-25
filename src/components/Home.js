@@ -8,25 +8,14 @@ Loads BackgroundSlideshow component to change the background based in the images
 */
 
 import React, { Component } from "react";
-import BackgroundSlideshow from "react-background-slideshow";
 import { NavLink } from "react-router-dom";
 import { Button, DropdownButton, Dropdown, Container } from "react-bootstrap";
 import "../styles/main.css";
 
-/*
-Images should have at least a resolution of 1280x850
-*/
-import image1 from "../images/back04.jpg";
-import image2 from "../images/back02.jpg";
-import image3 from "../images/back03.jpg";
-
-const images = [image1, image2];
-
 class MainPage extends Component {
   render() {
     return (
-      <div>
-        <BackgroundSlideshow images={images} animationDelay={5000} />
+      <div id="backgrnd">
         <Container id="main_container">
           <header id="header">
             <h1>¡Bienvenido a ArqueoMaps!</h1>

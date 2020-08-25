@@ -48,21 +48,22 @@ class Form_Edit extends Component {
   render() {
     return (
       <ApolloProvider client={client}>
-        <div className="box-gallery" id="background_div"></div>
-        <Container id="main_container">
-          <header id="header">
-            <h1>Edita civilizaciones</h1>
-            <p>Selecciona la civilización y edita sus lugares</p>
-          </header>
+        <div className="box-gallery" id="background_div">
+          <Container id="main_container">
+            <header id="header">
+              <h1>Edita civilizaciones</h1>
+              <p>Selecciona la civilización y edita sus lugares</p>
+            </header>
 
-          <Dropdown id="dropdown_Civlist">
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
-              Ver las civilizaciones disponibles
-            </Dropdown.Toggle>
-            <CivilizationList onSelectedCiv={this.onSelectedCiv.bind(this)} />
-            <PlacesList civilizationId={this.state.id_selected} />
-          </Dropdown>
-        </Container>
+            <Dropdown id="dropdown_Civlist">
+              <Dropdown.Toggle variant="success" id="dropdown-basic">
+                Ver las civilizaciones disponibles
+              </Dropdown.Toggle>
+              <CivilizationList onSelectedCiv={this.onSelectedCiv.bind(this)} />
+              <PlacesList civilizationId={this.state.id_selected} />
+            </Dropdown>
+          </Container>
+        </div>
       </ApolloProvider>
     );
   }

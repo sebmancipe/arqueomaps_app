@@ -119,62 +119,63 @@ class Form_Add extends Component {
 
     return (
       <ApolloProvider client={client}>
-        <div className="box-gallery" id="background_div"></div>
-        <Container id="main_container">
-          <header id="header">
-            <h1>Agrega civilizaciones</h1>
-            <p>
-              Ingresa los campos y agrega lugares a la civilización que estás
-              por crear
-            </p>
-          </header>
-          <Form onChange={this.handleChange} id="form_add">
-            <Form.Group id="form_add">
-              <Form.Label htmlFor="civilization_name">
-                Nombre de la civilización
-              </Form.Label>
-              <Form.Control
-                type="text"
-                name="civilization_name"
-                placeholder="Nombre"
-                id="civilization_name"
-              />
-              <Form.Text className="text-muted">
-                Esta información no podrá ser cambiada.
-              </Form.Text>
-              <Form.Label htmlFor="civilization_description">
-                Descripción
-              </Form.Label>
-              <Form.Control
-                type="text"
-                name="civilization_description"
-                placeholder="Descripción"
-                id="civilization_description"
-              />
-              <Form.Text className="text-muted">
-                Esta información no podrá ser cambiada.
-              </Form.Text>
-            </Form.Group>
+        <div className="box-gallery" id="background_div">
+          <Container id="main_container">
+            <header id="header">
+              <h1>Agrega civilizaciones</h1>
+              <p>
+                Ingresa los campos y agrega lugares a la civilización que estás
+                por crear
+              </p>
+            </header>
+            <Form onChange={this.handleChange} id="form_add">
+              <Form.Group id="form_add">
+                <Form.Label htmlFor="civilization_name">
+                  Nombre de la civilización
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  name="civilization_name"
+                  placeholder="Nombre"
+                  id="civilization_name"
+                />
+                <Form.Text className="text-muted">
+                  Esta información no podrá ser cambiada.
+                </Form.Text>
+                <Form.Label htmlFor="civilization_description">
+                  Descripción
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  name="civilization_description"
+                  placeholder="Descripción"
+                  id="civilization_description"
+                />
+                <Form.Text className="text-muted">
+                  Esta información no podrá ser cambiada.
+                </Form.Text>
+              </Form.Group>
 
-            <h4>Lugares</h4>
-            <Button
-              style={admin_buttons_style}
-              variant="secondary"
-              onClick={this.addLocation}
-            >
-              Agregar más lugares
-            </Button>
-            <Button
-              style={admin_buttons_style}
-              variant="secondary"
-              onClick={this.removeLocation}
-            >
-              Eliminar lugares
-            </Button>
-            <PlaceInputs places={placesToRender} />
-            <CivilizationAdd civilizationprops={civilizationprops} />
-          </Form>
-        </Container>
+              <h4>Lugares</h4>
+              <Button
+                style={admin_buttons_style}
+                variant="secondary"
+                onClick={this.addLocation}
+              >
+                Agregar más lugares
+              </Button>
+              <Button
+                style={admin_buttons_style}
+                variant="secondary"
+                onClick={this.removeLocation}
+              >
+                Eliminar lugares
+              </Button>
+              <PlaceInputs places={placesToRender} />
+              <CivilizationAdd civilizationprops={civilizationprops} />
+            </Form>
+          </Container>
+        </div>
       </ApolloProvider>
     );
   }

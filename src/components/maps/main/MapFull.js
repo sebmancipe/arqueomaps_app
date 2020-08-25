@@ -23,7 +23,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import "../../../styles/map_full.css";
 
 const httpLink = createHttpLink({
-  uri: config.HOST,
+  uri: "config.HOST",
 });
 
 // 3
